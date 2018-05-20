@@ -8,16 +8,16 @@ This module deals with implementing the kinect module to detect patient's moveme
 
 ***
 
-##Voice Recognition
+## Voice Recognition
 
 ***
 
-##ROS
+## ROS
 
 ***
 
-##Hosting Server
+## Hosting Server
 
 ***
 
-##Tablet Interface
+## Tablet Interface
