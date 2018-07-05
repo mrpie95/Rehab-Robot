@@ -1,3 +1,4 @@
+#include "Window.h"
 #include <iostream>
 #include <OpenNI.h>
 
@@ -6,6 +7,9 @@
 
 int main(int argc, char** argv)
 {
+	Window w;
+	w.init();
+
 	if (openni::OpenNI::initialize() != openni::Status::STATUS_OK)
 	{
 		log(openni::OpenNI::getExtendedError());
@@ -36,7 +40,16 @@ int main(int argc, char** argv)
 		log("Kinect URI successfully opened");
 	}
 
+	SDL_Event e;
 
-	std::cin.get();
+	for (;;) {
+		SDL_PollEvent(&e);
+		if (e.type == SDL_QUIT) {
+			break;
+		}
+		w.draw();
+	}
+	
+
 	return 0;
 }
