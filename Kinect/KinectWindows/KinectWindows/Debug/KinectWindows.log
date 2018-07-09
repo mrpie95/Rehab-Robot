@@ -1,2 +1,2 @@
-﻿  Window.cpp
-c:\users\patrick\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\window.cpp(68): error C4700: uninitialized local variable 'depthFrame' used
+﻿  KInectStream.cpp
+  KinectWindows.vcxproj -> C:\Users\jayde\Desktop\Rehab-Robot\Kinect\KinectWindows\Debug\KinectWindows.exe

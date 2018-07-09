@@ -32,7 +32,8 @@ void Window::init()
 		std::cout << "glew failed to init" << std::endl;
 	}
 
-	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_TEXTURE_2D);
 
 }
 
@@ -58,15 +59,7 @@ void Window::updateWindowParams()
 
 void Window::draw()
 {
-	//nite::UserTracker* m_pUserTracker;
-	openni::VideoStream v;
 
-	nite::UserTrackerFrameRef userTrackerFrame;
-	openni::VideoFrameRef* depthFrame = new openni::VideoStream();
-	//nite::Status rc = m_pUserTracker->readFrame(&userTrackerFrame);
-
-	v.readFrame(depthFrame);
-	std::cout << depthFrame->getSensorType() << std::endl;
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	SDL_GL_SwapWindow(window);
