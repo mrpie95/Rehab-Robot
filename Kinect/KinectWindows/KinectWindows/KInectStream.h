@@ -11,11 +11,15 @@ private:
 	openni::VideoStream& depthStream;
 	openni::Device& kinect;
 
+	openni::VideoStream** streams;
 	
 
 	int textureMapX;
 	int textureMapY;
 	openni::RGB888Pixel* textureMap;
+
+	int streamWidth;
+	int streamHeight;
 
 public:
 	KinectStream(openni::Device& device, openni::VideoStream& depthStream, openni::VideoStream& colourStream);

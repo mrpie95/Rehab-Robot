@@ -1,5 +1,6 @@
 #include "Window.h"
 #include <iostream>
+
 Window::Window()
 {
 }
@@ -35,11 +36,17 @@ void Window::init()
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
 
+
 }
 
 SDL_Window * Window::getWindow()
 {
 	return window;
+}
+
+SDL_GLContext Window::getOpenGLContext()
+{
+	return openglContext;
 }
 
 int Window::getWidth()
@@ -57,10 +64,8 @@ void Window::updateWindowParams()
 	SDL_GetWindowSize(window, &width, &height);
 }
 
-void Window::draw()
+void Window::clearFlipBuffers()
 {
-
-	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
 	SDL_GL_SwapWindow(window);
+	
 }

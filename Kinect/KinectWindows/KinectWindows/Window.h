@@ -12,6 +12,7 @@ private:
 	int height = 600;
 	SDL_Window* window;
 	SDL_GLContext openglContext;
+
 public:
 	Window();
 	~Window();
@@ -19,9 +20,10 @@ public:
 	void init();
 
 	SDL_Window* getWindow();
+	SDL_GLContext getOpenGLContext();
 
 	int getWidth();
 	int getHeight();
 	void updateWindowParams();
-	void draw();
+	void clearFlipBuffers();
 };
