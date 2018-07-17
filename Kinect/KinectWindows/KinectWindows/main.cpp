@@ -12,6 +12,7 @@ int main(int argc, char** argv)
 	Window depthWindow;
 	colorWindow.init();
 	depthWindow.init();
+	nite::UserTracker tracker;
 
 	if (openni::OpenNI::initialize() != openni::Status::STATUS_OK)
 	{
@@ -22,6 +23,8 @@ int main(int argc, char** argv)
 		log("OpenNI succefully initilized");
 	}
 
+	nite::NiTE::initialize();
+	
 	
 	openni::Array<openni::DeviceInfo> devices;
 	openni::OpenNI::enumerateDevices(&devices);
@@ -42,6 +45,11 @@ int main(int argc, char** argv)
 	else
 	{
 		log("Kinect URI successfully opened");
+	}
+
+	if (tracker.create(&kinect) != openni::Status::STATUS_OK)
+	{
+		log("failed to create traker");
 	}
 
 	kinectStatus = depth.create(kinect, openni::SENSOR_DEPTH);
@@ -86,8 +94,12 @@ int main(int argc, char** argv)
 			break;
 		}
 		kinectStream.run();
+		kinectStream.drawColorFrame();
 		colorWindow.clearFlipBuffers();
+		SDL_GL_MakeCurrent(depthWindow.getWindow(), depthWindow.getOpenGLContext());
+		kinectStream.drawDepthFrame();
 		depthWindow.clearFlipBuffers();
+		SDL_GL_MakeCurrent(colorWindow.getWindow(), colorWindow.getOpenGLContext());
 	}
 	
 
