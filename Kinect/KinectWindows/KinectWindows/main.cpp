@@ -9,9 +9,11 @@
 int main(int argc, char** argv)
 {
 	Window colorWindow;
-	Window depthWindow;
+	//Window depthWindow;
+	Window skeltonWindow;
+	skeltonWindow.init();
 	colorWindow.init();
-	depthWindow.init();
+	//depthWindow.init();
 	nite::UserTracker tracker;
 
 	if (openni::OpenNI::initialize() != openni::Status::STATUS_OK)
@@ -84,24 +86,33 @@ int main(int argc, char** argv)
 		log(openni::OpenNI::getExtendedError());
 	}
 
-	KinectStream kinectStream(kinect, depth, color);
+	KinectStream kinectStream(kinect, depth, color, tracker);
 	kinectStream.init();
 
 	SDL_Event e;
+
 	for (;;) {
 		SDL_PollEvent(&e);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		kinectStream.run();
+		kinectStream.drawColorFrame();
+		kinectStream.runTracker();
+		colorWindow.clearFlipBuffers();
+
+
+		SDL_GL_MakeCurrent(skeltonWindow.getWindow(), skeltonWindow.getOpenGLContext());
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		kinectStream.runTracker();
+		skeltonWindow.clearFlipBuffers();
+
+		SDL_GL_MakeCurrent(colorWindow.getWindow(), colorWindow.getOpenGLContext());
+
 		if (e.window.event == SDL_WINDOWEVENT_CLOSE) {
 			break;
 		}
-		kinectStream.run();
-		kinectStream.drawColorFrame();
-		colorWindow.clearFlipBuffers();
-		SDL_GL_MakeCurrent(depthWindow.getWindow(), depthWindow.getOpenGLContext());
-		kinectStream.drawDepthFrame();
-		depthWindow.clearFlipBuffers();
-		SDL_GL_MakeCurrent(colorWindow.getWindow(), colorWindow.getOpenGLContext());
 	}
 	
-
+	nite::NiTE::shutdown();
+	openni::OpenNI::shutdown();
 	return 0;
 }

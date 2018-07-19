@@ -1,20 +1,23 @@
 #include "KInectStream.h"
 #include <iostream>
 #include <GL/glew.h>
+#include <string>
+#include <algorithm>
 #define TEXTURE_SIZE 512
 
 #define log(x) std::cout << x << std::endl
+#define logI(x,i) std::cout << x <<" "<< i << std::endl;
 #define NUM_OF_CHUNCKS(dataSize, chunksize) ((((dataSize)-1)/(chunksize)+1))
 #define CHUNCK_SIZE(dataSize, chunksize) (NUM_OF_CHUNCKS(dataSize, chunksize)*(chunksize))
 
 #define COLORSTREAM true
-#define DEPTHSTREAM true
-#define DRAWSKELETON false
+#define DEPTHSTREAM false
+#define SKELETON true
 
 #define colorCount = 3
 
-KinectStream::KinectStream(openni::Device& device, openni::VideoStream& depthStream, openni::VideoStream& colourStream): 
-	kinect(device), depthStream(depthStream), colourStream(colourStream), streams(NULL)
+KinectStream::KinectStream(openni::Device& device, openni::VideoStream& depthStream, openni::VideoStream& colourStream, nite::UserTracker& tracker): 
+	kinect(device), depthStream(depthStream), colourStream(colourStream), tracker(tracker) ,streams(NULL)
 {
 }
 
@@ -106,9 +109,8 @@ void KinectStream::init()
 
 }
 
-// TODO: this probably contains so many memory leaks idk
+
 // TODO: this can probalbt be done in a fragment and vertext shader program and will scale properly and remove that stutter
-// this might not be thread safe
 void KinectStream::run()
 {
 	int index = -1;
@@ -138,6 +140,7 @@ void KinectStream::run()
 	else if (index == 1)
 	{
 		depthStream.readFrame(&depthFrame);
+	
 	}
 	else
 	{
@@ -159,6 +162,7 @@ void KinectStream::run()
 	
 	
 }
+
 
 //
 // NOTE: Swap opengl contexts before drawing
@@ -234,12 +238,7 @@ void KinectStream::drawDepthFrame()
 
 void KinectStream::drawColorFrame()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	glOrtho(0, 800, 600, 0, -1.0f, 1.0f);
+	
 
 	//file texture map with 0s
 	memset(colorTextureMap, 0, colorTextureMapX*colorTextureMapY * sizeof(openni::RGB888Pixel));
@@ -265,6 +264,11 @@ void KinectStream::drawColorFrame()
 			textureRow += colorTextureMapX;
 		}
 
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+		glLoadIdentity();
+		glOrtho(0, 800, 600, 0, -1.0f, 1.0f);
+
 		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); //what type of varible name is GL_LINEAR_MIPMAP_LINEAR
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -273,6 +277,7 @@ void KinectStream::drawColorFrame()
 		glColor4f(1, 1, 1, 1);
 
 		// TODO: this needs to be 2 triangles instead for shaders to work
+		glEnable(GL_TEXTURE_2D);
 		glBegin(GL_QUADS);
 
 		//topleft vertex
@@ -293,6 +298,7 @@ void KinectStream::drawColorFrame()
 		glVertex2f(0, 600);
 
 		glEnd();
+		glDisable(GL_TEXTURE_2D);
 
 
 	}
@@ -300,6 +306,8 @@ void KinectStream::drawColorFrame()
 
 void KinectStream::DrawLimb(nite::UserTracker* pUserTracker, const nite::SkeletonJoint& joint1, const nite::SkeletonJoint& joint2, int color)
 {
+	glDisable(GL_TEXTURE_2D);
+
 	float coordinates[6] = {0};
 	pUserTracker->convertJointCoordinatesToDepth(joint1.getPosition().x, joint1.getPosition().y, joint1.getPosition().z, &coordinates[0], &coordinates[1]);
 	pUserTracker->convertJointCoordinatesToDepth(joint2.getPosition().x, joint2.getPosition().y, joint2.getPosition().z, &coordinates[3], &coordinates[4]);
@@ -315,6 +323,7 @@ void KinectStream::DrawLimb(nite::UserTracker* pUserTracker, const nite::Skeleto
 	}
 	else if (joint1.getPositionConfidence() < 0.5f || joint2.getPositionConfidence() < 0.5f)
 	{
+		//log("low confidence in joint posisition");
 		return;
 	}
 	else
@@ -349,4 +358,117 @@ void KinectStream::DrawLimb(nite::UserTracker* pUserTracker, const nite::Skeleto
 	glDrawArrays(GL_POINTS, 0, 1);
 }
 
-	
+void KinectStream::DrawSkeleton(nite::UserTracker* pUserTracker, const nite::UserData& userData)
+{
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_HEAD), userData.getSkeleton().getJoint(nite::JOINT_NECK), 1);
+
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_LEFT_ELBOW), 2);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_ELBOW), userData.getSkeleton().getJoint(nite::JOINT_LEFT_HAND), 2);
+
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_ELBOW), 2);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_ELBOW), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_HAND), 2);
+
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_SHOULDER), 2);
+
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_TORSO), 2);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_TORSO), 2);
+
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_TORSO), userData.getSkeleton().getJoint(nite::JOINT_LEFT_HIP), 2);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_TORSO), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_HIP), 2);
+
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_HIP), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_HIP), 2);
+
+
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_HIP), userData.getSkeleton().getJoint(nite::JOINT_LEFT_KNEE), 2);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_KNEE), userData.getSkeleton().getJoint(nite::JOINT_LEFT_FOOT), 2);
+
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_HIP), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_KNEE), 2);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_KNEE), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_FOOT), 2);
+}
+
+
+bool temp = false;
+void KinectStream::updateUserState(const nite::UserData & user, uint64_t delta)
+{
+	if (user.isNew())
+	{
+		logI("Found new user ", std::to_string(user.getId()));
+	}
+	else if (user.isVisible() && !temp)
+	{
+		logI("Tracking user ", std::to_string(user.getId()));
+		temp = true;
+	}
+	else if (user.isLost())
+	{
+		logI("Lost user ", std::to_string(user.getId()));
+	}
+
+
+	//skeltons changed
+	if (userSkeltonState != user.getSkeleton().getState())
+	{
+		userSkeltonState = user.getSkeleton().getState();
+
+		switch (userSkeltonState)
+		{
+		case nite::SKELETON_NONE:
+			log("no tracking");
+			break;
+		case nite::SKELETON_CALIBRATING:
+			log("calibrating user");
+			break;
+		case nite::SKELETON_TRACKED:
+			log("Trackingg");
+			break;
+		default:
+			log("error in tracking");
+			break;
+		}
+	}
+}
+
+void KinectStream::runTracker()
+{
+	nite::Status status = tracker.readFrame(&trackerFrame);
+
+	if (status != nite::STATUS_OK)
+	{
+		log("failed to get tracker data");
+		return;
+	}
+
+	//depthFrame = trackerFrame.getDepthFrame();
+
+	const nite::UserMap& userLabels = trackerFrame.getUserMap();
+
+	const nite::Array<nite::UserData>& tempUsers = trackerFrame.getUsers();
+
+	for (size_t i = 0; i < tempUsers.getSize(); i++)
+	{
+		const nite::UserData& user = tempUsers[i];
+
+		updateUserState(user, trackerFrame.getTimestamp());
+
+		if (user.isNew())
+		{
+			tracker.startSkeletonTracking(user.getId());
+			tracker.startPoseDetection(user.getId(), nite::POSE_CROSSED_HANDS);
+
+		}
+		else if (!user.isLost())
+		{
+			if (user.getSkeleton().getState() == nite::SKELETON_TRACKED)
+			{
+				glMatrixMode(GL_PROJECTION);
+				glPushMatrix();
+				glLoadIdentity();
+				
+				glOrtho(0, 800, 600, 0, -1.0, 1.0);
+				glDisable(GL_TEXTURE_2D);
+
+				DrawSkeleton(&tracker, user);
+			}
+		}
+	}
+}
