@@ -12,7 +12,6 @@
 
 #define COLORSTREAM true
 #define DEPTHSTREAM false
-#define SKELETON true
 
 #define colorCount = 3
 
@@ -196,7 +195,7 @@ void KinectStream::drawDepthFrame()
 
 			for (size_t j = 0; j < depthFrame.getWidth(); j++, depthPixel++, pixelTexture++)
 			{
-				// TODO: fix this 
+				// TODO: fix this 16bit depthpixel to 24bit rgb
 				pixelTexture->r = *depthPixel / 0xff;
 				pixelTexture->g = (*depthPixel << 8)/0xff;
 				pixelTexture->b = 0;
@@ -276,7 +275,8 @@ void KinectStream::drawColorFrame()
 
 		glColor4f(1, 1, 1, 1);
 
-		// TODO: this needs to be 2 triangles instead for shaders to work
+		// TODO: this needs to be 2 triangles instead, i heard thats good practice for graphics apis
+
 		glEnable(GL_TEXTURE_2D);
 		glBegin(GL_QUADS);
 
@@ -444,31 +444,32 @@ void KinectStream::runTracker()
 
 	const nite::Array<nite::UserData>& tempUsers = trackerFrame.getUsers();
 
-	for (size_t i = 0; i < tempUsers.getSize(); i++)
+	if (tempUsers.isEmpty())
+		return;
+	
+	user = tempUsers[0];
+
+	updateUserState(user, trackerFrame.getTimestamp());
+
+	if (user.isNew())
 	{
-		const nite::UserData& user = tempUsers[i];
+		tracker.startSkeletonTracking(user.getId());
+		tracker.startPoseDetection(user.getId(), nite::POSE_CROSSED_HANDS);
 
-		updateUserState(user, trackerFrame.getTimestamp());
-
-		if (user.isNew())
+	}
+	else if (!user.isLost())
+	{
+		if (user.getSkeleton().getState() == nite::SKELETON_TRACKED)
 		{
-			tracker.startSkeletonTracking(user.getId());
-			tracker.startPoseDetection(user.getId(), nite::POSE_CROSSED_HANDS);
-
-		}
-		else if (!user.isLost())
-		{
-			if (user.getSkeleton().getState() == nite::SKELETON_TRACKED)
-			{
-				glMatrixMode(GL_PROJECTION);
-				glPushMatrix();
-				glLoadIdentity();
+			glMatrixMode(GL_PROJECTION);
+			glPushMatrix();
+			glLoadIdentity();
 				
-				glOrtho(0, 800, 600, 0, -1.0, 1.0);
-				glDisable(GL_TEXTURE_2D);
+			glOrtho(0, 800, 600, 0, -1.0, 1.0);
+			glDisable(GL_TEXTURE_2D);
 
-				DrawSkeleton(&tracker, user);
-			}
+			DrawSkeleton(&tracker, user);
 		}
 	}
+	
 }

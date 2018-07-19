@@ -1,9 +1,12 @@
-﻿  KInectStream.cpp
-c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\kinectstream.cpp(39): warning C4101: 'depthResolutionX': unreferenced local variable
-c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\kinectstream.cpp(40): warning C4101: 'depthResolutionY': unreferenced local variable
-c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\kinectstream.cpp(192): warning C4018: '<': signed/unsigned mismatch
-c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\kinectstream.cpp(197): warning C4018: '<': signed/unsigned mismatch
-c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\kinectstream.cpp(254): warning C4018: '<': signed/unsigned mismatch
-c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\kinectstream.cpp(259): warning C4018: '<': signed/unsigned mismatch
-c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\kinectstream.cpp(447): warning C4018: '<': signed/unsigned mismatch
+﻿  HandsOnHips.cpp
+c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\gestureinterface.h(25): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  KInectStream.cpp
+c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\kinectstream.cpp(38): warning C4101: 'depthResolutionX': unreferenced local variable
+c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\kinectstream.cpp(39): warning C4101: 'depthResolutionY': unreferenced local variable
+c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\kinectstream.cpp(191): warning C4018: '<': signed/unsigned mismatch
+c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\kinectstream.cpp(196): warning C4018: '<': signed/unsigned mismatch
+c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\kinectstream.cpp(253): warning C4018: '<': signed/unsigned mismatch
+c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\kinectstream.cpp(258): warning C4018: '<': signed/unsigned mismatch
+  main.cpp
+  Generating Code...
   KinectWindows.vcxproj -> C:\Users\Jayden\Desktop\Rehab-Robot\Kinect\KinectWindows\Debug\KinectWindows.exe

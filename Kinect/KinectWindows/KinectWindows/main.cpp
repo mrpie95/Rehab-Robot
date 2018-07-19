@@ -2,6 +2,8 @@
 #include <iostream>
 #include <OpenNI.h>
 #include "KInectStream.h"
+#include "HandsOnHead.h"
+#include "HandsOnHips.h"
 
 #define log(x) std::cout << x << std::endl;
 
@@ -90,7 +92,8 @@ int main(int argc, char** argv)
 	kinectStream.init();
 
 	SDL_Event e;
-
+	
+	//TODO:: this crashes here when you close window
 	for (;;) {
 		SDL_PollEvent(&e);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -106,6 +109,20 @@ int main(int argc, char** argv)
 		skeltonWindow.clearFlipBuffers();
 
 		SDL_GL_MakeCurrent(colorWindow.getWindow(), colorWindow.getOpenGLContext());
+
+		if (kinectStream.getUserSkeleton())
+		{
+			HandsOnHead head(*kinectStream.getUserSkeleton());
+			HandsOnHips hips(*kinectStream.getUserSkeleton());
+			if (head.checkForGesture())
+			{
+				log("Head");
+			}
+			else if (hips.checkForGesture())
+			{
+				log("Hips");
+			}
+		}
 
 		if (e.window.event == SDL_WINDOWEVENT_CLOSE) {
 			break;

@@ -144,11 +144,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="HandsOnHead.cpp" />
+    <ClCompile Include="HandsOnHips.cpp" />
     <ClCompile Include="KInectStream.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="gestureInterface.h" />
+    <ClInclude Include="HandsOnHead.h" />
+    <ClInclude Include="HandsOnHips.h" />
     <ClInclude Include="KInectStream.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>

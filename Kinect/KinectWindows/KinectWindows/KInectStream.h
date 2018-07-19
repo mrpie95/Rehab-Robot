@@ -2,6 +2,7 @@
 #include <OpenNI.h>
 #include <NiTE.h>
 #include <vector>
+#include <memory>
 
 class KinectStream
 {
@@ -42,6 +43,22 @@ public:
 	void drawDepthFrame();
 	void drawColorFrame();
 
+	//TODO: is this unethical
+	nite::Skeleton* getUserSkeleton()
+	{
+		if (&user != NULL)
+		{
+			if (!user.isLost())
+			{
+				if (user.getSkeleton().getState() == nite::SKELETON_TRACKED)
+				{
+					return (const_cast<nite::Skeleton*>(&user.getSkeleton()));
+				}
+			}
+			
+		}
+		return nullptr;
+	}
 
 };
 

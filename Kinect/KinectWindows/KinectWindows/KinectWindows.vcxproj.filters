@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Gestures">
+      <UniqueIdentifier>{65d3330e-c7d7-4bed-9c23-f5918f7a4f65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gestures\Headers">
+      <UniqueIdentifier>{e49ec915-f05e-4219-bd22-461175933e4a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -24,6 +30,12 @@
     <ClCompile Include="KInectStream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HandsOnHead.cpp">
+      <Filter>Gestures</Filter>
+    </ClCompile>
+    <ClCompile Include="HandsOnHips.cpp">
+      <Filter>Gestures</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -31,6 +43,15 @@
     </ClInclude>
     <ClInclude Include="KInectStream.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gestureInterface.h">
+      <Filter>Gestures</Filter>
+    </ClInclude>
+    <ClInclude Include="HandsOnHead.h">
+      <Filter>Gestures\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HandsOnHips.h">
+      <Filter>Gestures\Headers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
