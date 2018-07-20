@@ -36,6 +36,9 @@
     <ClCompile Include="HandsOnHips.cpp">
       <Filter>Gestures</Filter>
     </ClCompile>
+    <ClCompile Include="SimonSays.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -52,6 +55,9 @@
     </ClInclude>
     <ClInclude Include="HandsOnHips.h">
       <Filter>Gestures\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SimonSays.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

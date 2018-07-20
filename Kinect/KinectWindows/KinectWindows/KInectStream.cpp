@@ -12,7 +12,7 @@
 
 #define COLORSTREAM true
 #define DEPTHSTREAM false
-
+#define SKELETON true
 #define colorCount = 3
 
 KinectStream::KinectStream(openni::Device& device, openni::VideoStream& depthStream, openni::VideoStream& colourStream, nite::UserTracker& tracker): 

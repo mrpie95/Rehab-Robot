@@ -1,31 +1,35 @@
 #pragma once
 #include <NiTE.h>
 #include <math.h>
-
+#include <string>
 //TODO: better way of tacking posistion of points
-//Easy: euclid distance
-//Itermediate: trilateration
-//Hard: deltas/keyframes
+
 class GestureInterface
 {
 private:
-	nite::Skeleton skeleton;
+
+	const char* name;
 public:
-	GestureInterface(nite::Skeleton skeleton) : skeleton(skeleton) {};
+	GestureInterface(const char* name) : name(name) {};
 	virtual ~GestureInterface() {};
 
-	virtual bool checkForGesture() = 0;
+	virtual bool checkForGesture(nite::Skeleton skeleton) = 0;
 
 	nite::Skeleton getSkeleton() { return skeleton; }
+	const char* getName() { return name; }
 	
+
+
+
+protected:
+	nite::Skeleton skeleton;
+
+
 	
-	//sqroot can be taken out to improve on performance
 	float euclidDistance(nite::Point3f a, nite::Point3f b)
 	{
 		return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2) + pow(a.z - b.z, 2));
 	}
-
-
 
 	// TODO: catch exceptions, what happens if there is no skelton or it cant find joint
 

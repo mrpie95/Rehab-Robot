@@ -3,9 +3,9 @@
 class HandsOnHips :public GestureInterface
 {
 public:
-	HandsOnHips(nite::Skeleton skel);
+	HandsOnHips();
 	~HandsOnHips();
 
-	bool checkForGesture();
+	bool checkForGesture(nite::Skeleton skeleton);
 };
 

@@ -2,7 +2,7 @@
 
 
 
-HandsOnHips::HandsOnHips(nite::Skeleton skel) : GestureInterface(skel)
+HandsOnHips::HandsOnHips() : GestureInterface("Hips")
 {
 }
 
@@ -11,8 +11,9 @@ HandsOnHips::~HandsOnHips()
 {
 }
 
-bool HandsOnHips::checkForGesture()
+bool HandsOnHips::checkForGesture(nite::Skeleton skeleton)
 {
+	this->skeleton = skeleton;
 	float leftHandToLeftHip = euclidDistance(this->getLeftHandPos(), this->getLeftHipPos()); 
 	float rightHandToRightHip = euclidDistance(this->getRightHandPos(), this->getRightHipPos());
 

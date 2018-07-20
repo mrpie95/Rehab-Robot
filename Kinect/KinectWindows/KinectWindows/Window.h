@@ -25,5 +25,5 @@ public:
 	int getWidth();
 	int getHeight();
 	void updateWindowParams();
-	void clearFlipBuffers();
+	void FlipBuffers();
 };

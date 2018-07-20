@@ -148,6 +148,7 @@
     <ClCompile Include="HandsOnHips.cpp" />
     <ClCompile Include="KInectStream.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SimonSays.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +156,7 @@
     <ClInclude Include="HandsOnHead.h" />
     <ClInclude Include="HandsOnHips.h" />
     <ClInclude Include="KInectStream.h" />
+    <ClInclude Include="SimonSays.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

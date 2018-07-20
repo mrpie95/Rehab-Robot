@@ -2,7 +2,7 @@
 
 
 
-HandsOnHead::HandsOnHead(nite::Skeleton skeleton): GestureInterface(skeleton)
+HandsOnHead::HandsOnHead(): GestureInterface("Head")
 {
 }
 
@@ -11,8 +11,9 @@ HandsOnHead::~HandsOnHead()
 {
 }
 
-bool HandsOnHead::checkForGesture()
+bool HandsOnHead::checkForGesture(nite::Skeleton skeleton)
 {
+	this->skeleton = skeleton;
 	float LeftHandToHead = euclidDistance(this->getLeftHandPos(), this->getHeadPos());
 	float RightHandToHead = euclidDistance(this->getRightHandPos(), this->getHeadPos());
 

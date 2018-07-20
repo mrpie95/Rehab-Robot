@@ -67,7 +67,7 @@ void Window::updateWindowParams()
 	SDL_GetWindowSize(window, &width, &height);
 }
 
-void Window::clearFlipBuffers()
+void Window::FlipBuffers()
 {
 	SDL_GL_SwapWindow(window);
 	
