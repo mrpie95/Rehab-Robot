@@ -5,7 +5,11 @@
 #include "KInectStream.h"
 #include "HandsOnHead.h"
 #include "HandsOnHips.h"
+#include "HandsOnShoulders.h"
 #include <vector>
+#include <ctime>
+#include <string>
+#include <chrono>
 
 #define log(x) std::cout << x << std::endl;
 
@@ -24,6 +28,9 @@ private:
 	nite::Skeleton* skeleton;
 
 	std::vector<GestureInterface*> gestures;
+
+	int getRandomNumber();
+
 public:
 	SimonSays();
 	~SimonSays();

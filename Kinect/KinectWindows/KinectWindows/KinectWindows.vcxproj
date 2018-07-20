@@ -146,6 +146,7 @@
   <ItemGroup>
     <ClCompile Include="HandsOnHead.cpp" />
     <ClCompile Include="HandsOnHips.cpp" />
+    <ClCompile Include="HandsOnShoulders.cpp" />
     <ClCompile Include="KInectStream.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SimonSays.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="gestureInterface.h" />
     <ClInclude Include="HandsOnHead.h" />
     <ClInclude Include="HandsOnHips.h" />
+    <ClInclude Include="HandsOnShoulders.h" />
     <ClInclude Include="KInectStream.h" />
     <ClInclude Include="SimonSays.h" />
     <ClInclude Include="Window.h" />

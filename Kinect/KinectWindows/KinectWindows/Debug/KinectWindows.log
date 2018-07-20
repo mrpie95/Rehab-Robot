@@ -1,2 +1,3 @@
 ﻿  SimonSays.cpp
-  KinectWindows.vcxproj -> C:\Users\jayde\Desktop\Rehab-Robot\Kinect\KinectWindows\Debug\KinectWindows.exe
+c:\users\nao2018\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\simonsays.cpp(16): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  KinectWindows.vcxproj -> C:\Users\nao2018\Desktop\Rehab-Robot\Kinect\KinectWindows\Debug\KinectWindows.exe
