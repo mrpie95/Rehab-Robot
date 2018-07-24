@@ -1,5 +1,5 @@
 #include "SimonSays.h"
-
+#include "WaveGesture.h"
 
 
 SimonSays::SimonSays()
@@ -97,6 +97,8 @@ void SimonSays::init()
 	gestures.push_back(new HandsOnHead());
 	gestures.push_back(new HandsOnHips());
 	gestures.push_back(new HandsOnShoulders());
+	gestures.push_back(new WaveGesture(Hand::rightHand));
+	gestures.push_back(new WaveGesture(Hand::leftHand));
 }
 
 void SimonSays::run()
@@ -127,54 +129,18 @@ void SimonSays::run()
 		
 		elapsed = std::chrono::high_resolution_clock::now() - start;
 		
-		//log(elapsed.count());
+	
 
-		if (playingGame)
+		if (kinectStream->getUserSkeleton())
 		{
-			switch (num)
+			for (auto g : gestures)
 			{
-			case 0:
-				log("Simon says put your hands on your head");
-				action = "Head";
-				break;
-			case 1:
-				log("Simon says put your hands on your hips");
-				action = "Hips";
-				break;
-			case 2:
-				log("Simon says put your hand on your shoulders");
-				action = "Shoulders";
-				break;
-			default:
-				log("Error with rng");
-			}
-
-			if (kinectStream->getUserSkeleton())
-			{
-				for (auto g : gestures)
+				if (g->checkForGesture(*kinectStream->getUserSkeleton()))
 				{
-					if (g->checkForGesture(*kinectStream->getUserSkeleton()))
-					{
-						log(g->getName());
-
-						if (action == g->getName() && elapsed.count() > 5)
-						{
-							log("Correct action");
-							start = std::chrono::high_resolution_clock::now();
-						}
-						else
-						{
-							log("Incorrect action");
-							start = std::chrono::high_resolution_clock::now();
-						}
-					}
+					log(g->getName());
 				}
 			}
-
-
-			playingGame = false;
 		}
-
 
 		
 

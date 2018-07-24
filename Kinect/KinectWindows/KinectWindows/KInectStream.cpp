@@ -304,8 +304,13 @@ void KinectStream::drawColorFrame()
 	}
 }
 
-void KinectStream::DrawLimb(nite::UserTracker* pUserTracker, const nite::SkeletonJoint& joint1, const nite::SkeletonJoint& joint2, int color)
+void KinectStream::DrawLimb(nite::UserTracker* pUserTracker, const nite::SkeletonJoint& joint1, const nite::SkeletonJoint& joint2, const nite::UserData& user)
 {
+	bool prime = false;
+	if (PrimeUser.getId() == user.getId())
+		prime = true;
+
+
 	glDisable(GL_TEXTURE_2D);
 
 	float coordinates[6] = {0};
@@ -319,16 +324,23 @@ void KinectStream::DrawLimb(nite::UserTracker* pUserTracker, const nite::Skeleto
 
 	if (joint1.getPositionConfidence() == 1 && joint2.getPositionConfidence() == 1)
 	{
-		glColor3f(1.0f - colors[color][0], 1.0f - colors[color][1], 1.0f - colors[color][2]);
+		if (prime)
+			glColor3f(0.0f, 1.0f, 0.0f);
+		else
+			glColor3f(1.0f, 1.0f, 1.0f);
 	}
 	else if (joint1.getPositionConfidence() < 0.5f || joint2.getPositionConfidence() < 0.5f)
 	{
 		//log("low confidence in joint posisition");
+		glColor3f(1.0f, 1.0f, 1.0f);
 		return;
 	}
 	else
 	{
-		glColor3f(.5, .5, .5);
+		if (prime)
+			glColor3f(1.0f, 1.0f, 0.0f);
+		else
+			glColor3f(1.0f, 1.0f, 1.0f);
 	}
 	glPointSize(2);
 	glVertexPointer(3, GL_FLOAT, 0, coordinates);
@@ -337,22 +349,34 @@ void KinectStream::DrawLimb(nite::UserTracker* pUserTracker, const nite::Skeleto
 	glPointSize(10);
 	if (joint1.getPositionConfidence() == 1)
 	{
-		glColor3f(1.0f - colors[color][0], 1.0f - colors[color][1], 1.0f - colors[color][2]);
+		if (prime)
+			glColor3f(0.0f, 1.0f, 0.0f);
+		else
+			glColor3f(1.0f, 1.0f, 1.0f);
 	}
 	else
 	{
-		glColor3f(.5, .5, .5);
+		if (prime)
+			glColor3f(1.0f, 1.0f, 0.0f);
+		else
+			glColor3f(1.0f, 1.0f, 1.0f);
 	}
 	glVertexPointer(3, GL_FLOAT, 0, coordinates);
 	glDrawArrays(GL_POINTS, 0, 1);
 
 	if (joint2.getPositionConfidence() == 1)
 	{
-		glColor3f(1.0f - colors[color][0], 1.0f - colors[color][1], 1.0f - colors[color][2]);
+		if (prime)
+			glColor3f(0.0f, 1.0f, 0.0f);
+		else
+			glColor3f(1.0f, 1.0f, 1.0f);
 	}
 	else
 	{
-		glColor3f(.5, .5, .5);
+		if (prime)
+			glColor3f(1.0f, 1.0f, 0.0f);
+		else
+			glColor3f(1.0f, 1.0f, 1.0f);
 	}
 	glVertexPointer(3, GL_FLOAT, 0, coordinates+3);
 	glDrawArrays(GL_POINTS, 0, 1);
@@ -360,30 +384,30 @@ void KinectStream::DrawLimb(nite::UserTracker* pUserTracker, const nite::Skeleto
 
 void KinectStream::DrawSkeleton(nite::UserTracker* pUserTracker, const nite::UserData& userData)
 {
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_HEAD), userData.getSkeleton().getJoint(nite::JOINT_NECK), 1);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_HEAD), userData.getSkeleton().getJoint(nite::JOINT_NECK), userData);
 
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_LEFT_ELBOW), 2);
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_ELBOW), userData.getSkeleton().getJoint(nite::JOINT_LEFT_HAND), 2);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_LEFT_ELBOW), userData);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_ELBOW), userData.getSkeleton().getJoint(nite::JOINT_LEFT_HAND), userData);
 
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_ELBOW), 2);
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_ELBOW), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_HAND), 2);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_ELBOW), userData);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_ELBOW), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_HAND), userData);
 
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_SHOULDER), 2);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_SHOULDER), userData);
 
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_TORSO), 2);
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_TORSO), 2);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_TORSO), userData);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_TORSO), userData);
 
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_TORSO), userData.getSkeleton().getJoint(nite::JOINT_LEFT_HIP), 2);
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_TORSO), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_HIP), 2);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_TORSO), userData.getSkeleton().getJoint(nite::JOINT_LEFT_HIP), userData);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_TORSO), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_HIP), userData);
 
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_HIP), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_HIP), 2);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_HIP), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_HIP), userData);
 
 
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_HIP), userData.getSkeleton().getJoint(nite::JOINT_LEFT_KNEE), 2);
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_KNEE), userData.getSkeleton().getJoint(nite::JOINT_LEFT_FOOT), 2);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_HIP), userData.getSkeleton().getJoint(nite::JOINT_LEFT_KNEE), userData);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_KNEE), userData.getSkeleton().getJoint(nite::JOINT_LEFT_FOOT), userData);
 
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_HIP), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_KNEE), 2);
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_KNEE), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_FOOT), 2);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_HIP), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_KNEE), userData);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_KNEE), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_FOOT), userData);
 }
 
 
@@ -431,14 +455,14 @@ void KinectStream::updateUserState(const nite::UserData & user, uint64_t delta)
 void KinectStream::runTracker()
 {
 	nite::Status status = tracker.readFrame(&trackerFrame);
-
+	users.clear();
 	if (status != nite::STATUS_OK)
 	{
 		log("failed to get tracker data");
 		return;
 	}
 
-	//depthFrame = trackerFrame.getDepthFrame();
+	
 
 	const nite::UserMap& userLabels = trackerFrame.getUserMap();
 
@@ -447,29 +471,44 @@ void KinectStream::runTracker()
 	if (tempUsers.isEmpty())
 		return;
 	
-	user = tempUsers[0];
-
-	updateUserState(user, trackerFrame.getTimestamp());
-
-	if (user.isNew())
+	for (size_t i = 0; i < tempUsers.getSize(); i++)
 	{
-		tracker.startSkeletonTracking(user.getId());
-		tracker.startPoseDetection(user.getId(), nite::POSE_CROSSED_HANDS);
+		nite::UserData user = tempUsers[i];
 
-	}
-	else if (!user.isLost())
-	{
-		if (user.getSkeleton().getState() == nite::SKELETON_TRACKED)
+		updateUserState(user, trackerFrame.getTimestamp());
+
+		if (user.isNew())
 		{
-			glMatrixMode(GL_PROJECTION);
-			glPushMatrix();
-			glLoadIdentity();
-				
-			glOrtho(0, 800, 600, 0, -1.0, 1.0);
-			glDisable(GL_TEXTURE_2D);
-
-			DrawSkeleton(&tracker, user);
+			tracker.startSkeletonTracking(user.getId());
+			tracker.startPoseDetection(user.getId(), nite::POSE_CROSSED_HANDS);
+			
 		}
+		else if (!user.isLost())
+		{
+			if (user.getSkeleton().getState() == nite::SKELETON_TRACKED)
+			{
+				glMatrixMode(GL_PROJECTION);
+				glPushMatrix();
+				glLoadIdentity();
+
+				glOrtho(0, 800, 600, 0, -1.0, 1.0);
+				glDisable(GL_TEXTURE_2D);
+
+				if (user.getPose(nite::POSE_CROSSED_HANDS).isEntered())
+				{
+					PrimeUser = user;
+					logI("New prime, user id", user.getId());
+				}
+				
+				//update prime
+				if (PrimeUser.getId() == user.getId())
+					PrimeUser = user;
+
+				DrawSkeleton(&tracker, user);
+				
+			}
+		}
+		
 	}
 	
 }

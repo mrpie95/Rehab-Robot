@@ -1,13 +1,14 @@
 #pragma once
 #include <NiTE.h>
 #include <math.h>
+#include <iostream>
 #include <string>
-//TODO: better way of tacking posistion of points
+
+#define log(x) std::cout << x << std::endl
 
 class GestureInterface
 {
 private:
-
 	const char* name;
 public:
 	GestureInterface(const char* name) : name(name) {};
@@ -25,11 +26,11 @@ protected:
 	nite::Skeleton skeleton;
 
 
+	//x,y,z
+	float euclidDistance3D(nite::Point3f a, nite::Point3f b) { return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2) + pow(a.z - b.z, 2)); }
+	//x,y
+	float euclidDistance2D(nite::Point3f a, nite::Point3f b) { return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2)); }
 	
-	float euclidDistance(nite::Point3f a, nite::Point3f b)
-	{
-		return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2) + pow(a.z - b.z, 2));
-	}
 
 	// TODO: catch exceptions, what happens if there is no skelton or it cant find joint
 

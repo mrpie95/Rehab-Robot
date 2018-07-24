@@ -3,6 +3,7 @@
 #include <NiTE.h>
 #include <vector>
 #include <memory>
+#include "gestureInterface.h"
 
 class KinectStream
 {
@@ -14,7 +15,6 @@ private:
 	openni::Device& kinect;
 
 	openni::VideoStream** streams;
-	float colors[4][3] = { { 1, 0, 0 },{ 0, 1, 0 },{ 0, 0, 1 },{ 1, 1, 1 } };
 
 	int colorTextureMapX;
 	int colorTextureMapY;
@@ -26,10 +26,11 @@ private:
 
 	nite::UserTracker& tracker;
 	nite::UserTrackerFrameRef trackerFrame;
-	nite::UserData user;
+	nite::UserData PrimeUser;
+	std::vector<nite::UserData> users;
 	nite::SkeletonState userSkeltonState = nite::SKELETON_NONE;
 
-	void DrawLimb(nite::UserTracker* pUserTracker, const nite::SkeletonJoint& joint1, const nite::SkeletonJoint& joint2, int color);
+	void DrawLimb(nite::UserTracker* pUserTracker, const nite::SkeletonJoint& joint1, const nite::SkeletonJoint& joint2, const nite::UserData& user);
 	void DrawSkeleton(nite::UserTracker* pUserTracker, const nite::UserData& userData);
 	void updateUserState(const nite::UserData& user, uint64_t delta);
 public:
@@ -46,19 +47,20 @@ public:
 	//TODO: is this unethical
 	nite::Skeleton* getUserSkeleton()
 	{
-		if (&user != NULL)
+		if (&PrimeUser != NULL)
 		{
-			if (!user.isLost())
+			if (!PrimeUser.isLost())
 			{
-				if (user.getSkeleton().getState() == nite::SKELETON_TRACKED)
+				if (PrimeUser.getSkeleton().getState() == nite::SKELETON_TRACKED)
 				{
-					return (const_cast<nite::Skeleton*>(&user.getSkeleton()));
+					return (const_cast<nite::Skeleton*>(&PrimeUser.getSkeleton()));
 				}
 			}
 			
 		}
 		return nullptr;
 	}
+
 
 };
 

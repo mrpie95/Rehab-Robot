@@ -42,6 +42,9 @@
     <ClCompile Include="HandsOnShoulders.cpp">
       <Filter>Gestures</Filter>
     </ClCompile>
+    <ClCompile Include="WaveGesture.cpp">
+      <Filter>Gestures</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -63,6 +66,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HandsOnShoulders.h">
+      <Filter>Gestures\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveGesture.h">
       <Filter>Gestures\Headers</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,3 +1,17 @@
-﻿  SimonSays.cpp
-c:\users\nao2018\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\simonsays.cpp(16): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  KinectWindows.vcxproj -> C:\Users\nao2018\Desktop\Rehab-Robot\Kinect\KinectWindows\Debug\KinectWindows.exe
+﻿  KInectStream.cpp
+c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\kinectstream.cpp(38): warning C4101: 'depthResolutionX': unreferenced local variable
+c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\kinectstream.cpp(39): warning C4101: 'depthResolutionY': unreferenced local variable
+c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\kinectstream.cpp(191): warning C4018: '<': signed/unsigned mismatch
+c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\kinectstream.cpp(196): warning C4018: '<': signed/unsigned mismatch
+c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\kinectstream.cpp(253): warning C4018: '<': signed/unsigned mismatch
+c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\kinectstream.cpp(258): warning C4018: '<': signed/unsigned mismatch
+c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\kinectstream.cpp(474): warning C4018: '<': signed/unsigned mismatch
+  SimonSays.cpp
+c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\simonsays.h(14): warning C4005: 'log': macro redefinition
+  c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\gestureinterface.h(7): note: see previous definition of 'log'
+c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\simonsays.cpp(16): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  main.cpp
+c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\simonsays.h(14): warning C4005: 'log': macro redefinition
+  c:\users\jayden\desktop\rehab-robot\kinect\kinectwindows\kinectwindows\gestureinterface.h(7): note: see previous definition of 'log'
+  Generating Code...
+  KinectWindows.vcxproj -> C:\Users\Jayden\Desktop\Rehab-Robot\Kinect\KinectWindows\Debug\KinectWindows.exe
