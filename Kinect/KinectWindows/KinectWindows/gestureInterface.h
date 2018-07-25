@@ -14,11 +14,11 @@ public:
 	GestureInterface(const char* name) : name(name) {};
 	virtual ~GestureInterface() {};
 
-	virtual bool checkForGesture(nite::Skeleton skeleton) = 0;
+	virtual bool checkForGesture() = 0;
 
 	nite::Skeleton getSkeleton() { return skeleton; }
 	const char* getName() { return name; }
-	
+	void updateSkeleton(nite::Skeleton skelly) { this->skeleton = skelly; }
 
 
 

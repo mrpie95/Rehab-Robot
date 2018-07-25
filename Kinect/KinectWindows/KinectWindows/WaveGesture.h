@@ -34,6 +34,6 @@ public:
 	~WaveGesture();
 
 
-	bool checkForGesture(nite::Skeleton skeleton);
+	bool checkForGesture();
 };
 

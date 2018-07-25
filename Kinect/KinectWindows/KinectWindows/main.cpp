@@ -6,9 +6,16 @@
 
 int main(int argc, char** argv)
 {
-	SimonSays simon;
-	simon.init();
-	simon.run();
-	std::cin.get();
+	try
+	{
+		SimonSays simon;
+		simon.init();
+		simon.run();
+	}
+	catch (...)
+	{
+		log("Yeah Nah");
+		return 123456789;
+	}
 	return 0;
 }

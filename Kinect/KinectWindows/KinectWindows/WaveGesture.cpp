@@ -70,9 +70,8 @@ bool WaveGesture::LeftHandLeftOfElbow()
 
 }
 
-bool WaveGesture::checkForGesture(nite::Skeleton skeleton)
+bool WaveGesture::checkForGesture()
 {
-	this->skeleton = skeleton;
 	bool left = false;
 	bool right = false;
 	if (hand == Hand::rightHand)

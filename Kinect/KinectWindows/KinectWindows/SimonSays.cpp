@@ -1,6 +1,10 @@
 #include "SimonSays.h"
 #include "WaveGesture.h"
+#include "StandOnOneLeg.h"
 
+#define GESTURE_DEBUG 0
+
+#define SIMON_NOT_SAY_CHANCE 0.2f
 
 SimonSays::SimonSays()
 {
@@ -11,14 +15,28 @@ SimonSays::~SimonSays()
 {
 }
 
-int SimonSays::getRandomNumber()
+int SimonSays::getRandomNumber(int max)
 {
-	srand(time(NULL));
-	return rand() % 3;	
+	
+	return rand() % max;
+}
+
+
+//TODO: better alg needed, something that grows without results and swap out rand for the std lib
+bool SimonSays::roll()
+{
+	unsigned int lowerbound = RAND_MAX * SIMON_NOT_SAY_CHANCE;
+	unsigned int roll = rand();
+
+	if (roll >= lowerbound)
+		return false;
+	else
+		return true; //topdecked
 }
 
 void SimonSays::init()
 {
+	srand(time(NULL));
 	camera.init();
 	skeletonWindow.init();
 
@@ -99,18 +117,20 @@ void SimonSays::init()
 	gestures.push_back(new HandsOnShoulders());
 	gestures.push_back(new WaveGesture(Hand::rightHand));
 	gestures.push_back(new WaveGesture(Hand::leftHand));
+	gestures.push_back(new StandOnOneLeg());
 }
 
 void SimonSays::run()
 {
 	SDL_Event e;
 	bool playingGame = true;
-	int num = getRandomNumber();
+	int num = 0;
 	std::string action;
 
 	auto start = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> elapsed;
-
+	bool simonSays;
+	bool first = true;
 	//TODO:: this crashes here when you close window
 	for (;;) {
 		SDL_PollEvent(&e);
@@ -127,22 +147,81 @@ void SimonSays::run()
 
 		SDL_GL_MakeCurrent(camera.getWindow(), camera.getOpenGLContext());
 		
-		elapsed = std::chrono::high_resolution_clock::now() - start;
-		
 	
-
+#if GESTURE_DEBUG
 		if (kinectStream->getUserSkeleton())
 		{
 			for (auto g : gestures)
 			{
-				if (g->checkForGesture(*kinectStream->getUserSkeleton()))
+				g->updateSkeleton(*kinectStream->getUserSkeleton());
+				if (g->checkForGesture())
 				{
 					log(g->getName());
 				}
 			}
 		}
+#else 
+		//simon says starts here
+		elapsed = std::chrono::high_resolution_clock::now() - start;
+
+		if (kinectStream->getUserSkeleton())
+		{
+			int gestureCount = gestures.size();
+			int randnum = getRandomNumber(gestureCount);
+
+			if (!gestureSelected)
+			{
+				simonSays = !roll();
+				gestureSelected = gestures[randnum];
+			}
+			else
+			{
+				gestureSelected->updateSkeleton(*kinectStream->getUserSkeleton());
+
+				if (simonSays)
+				{
+					if (first)
+						std::cout << "Simon says " << gestureSelected->getName() << std::endl;
+					first = false;
+
+					if (gestureSelected->checkForGesture())
+					{
+						first = true;
+						gestureSelected = nullptr;
+						start = std::chrono::high_resolution_clock::now();
+					}
+
+					if (elapsed.count() > 4.0f)
+					{
+						log("failed");
+						first = true;
+						gestureSelected = nullptr;
+						start = std::chrono::high_resolution_clock::now();
+					}
+				}
+				else 
+				{
+					if (first)
+						std::cout << gestureSelected->getName() << std::endl;
+					first = false;
+
+					if (elapsed.count() > 2.0f)
+					{
+						first = true;
+						gestureSelected = nullptr;
+						start = std::chrono::high_resolution_clock::now();
+					}
+				}
+			}
+
+
+
+		}
 
 		
+
+
+#endif
 
 		if (e.window.event == SDL_WINDOWEVENT_CLOSE) {
 			break;

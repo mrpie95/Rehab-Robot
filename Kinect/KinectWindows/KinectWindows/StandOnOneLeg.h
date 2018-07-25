@@ -1,10 +1,10 @@
 #pragma once
 #include "gestureInterface.h"
-class HandsOnHips :public GestureInterface
+class StandOnOneLeg :public GestureInterface
 {
 public:
-	HandsOnHips();
-	~HandsOnHips();
+	StandOnOneLeg();
+	~StandOnOneLeg();
 
 	bool checkForGesture();
 };

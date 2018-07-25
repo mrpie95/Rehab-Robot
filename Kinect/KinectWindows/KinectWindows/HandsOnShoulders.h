@@ -7,6 +7,6 @@ public:
 	HandsOnShoulders();
 	~HandsOnShoulders();
 
-	bool checkForGesture(nite::Skeleton skeleton);
+	bool checkForGesture();
 };
 

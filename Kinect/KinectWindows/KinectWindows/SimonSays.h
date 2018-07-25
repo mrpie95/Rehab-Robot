@@ -29,8 +29,10 @@ private:
 
 	std::vector<GestureInterface*> gestures;
 
-	int getRandomNumber();
+	int getRandomNumber(int max);
+	bool roll();
 
+	GestureInterface* gestureSelected;
 public:
 	SimonSays();
 	~SimonSays();
