@@ -1,7 +1,11 @@
 #include "Window.h"
 #include <iostream>
 
-Window::Window()
+Window::Window(): name("memes"), width(800), height(600), xPos(0), yPos(0)
+{
+}
+
+Window::Window(const char* name, int width, int height, int xPos, int yPos): name(name), width(width), height(height), xPos(xPos), yPos(yPos)
 {
 }
 
@@ -24,7 +28,7 @@ void Window::init()
 	SDL_GL_SetSwapInterval(0);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
-	window = SDL_CreateWindow("Memes", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+	window = SDL_CreateWindow(name, xPos, yPos, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 	openglContext = SDL_GL_CreateContext(window);
 
 	glewExperimental = GL_TRUE;
@@ -70,5 +74,6 @@ void Window::updateWindowParams()
 void Window::FlipBuffers()
 {
 	SDL_GL_SwapWindow(window);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 }

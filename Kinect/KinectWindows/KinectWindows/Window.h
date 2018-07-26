@@ -8,13 +8,18 @@
 class Window
 {
 private:
-	int width = 800;
-	int height = 600;
+	const char* name;
+	int width;
+	int height; 
+	const int yPos;
+	const int xPos;
 	SDL_Window* window;
 	SDL_GLContext openglContext;
 
 public:
 	Window();
+	Window(const char* name,int width, int height, int xPos, int yPos);
+
 	~Window();
 
 	void init();

@@ -211,7 +211,6 @@ void KinectStream::drawDepthFrame()
 
 		glColor4f(1, 1, 1, 1);
 
-		// TODO: this needs to be 2 triangles instead for shaders to work
 		glBegin(GL_QUADS);
 
 		//topleft vertex
@@ -275,7 +274,6 @@ void KinectStream::drawColorFrame()
 
 		glColor4f(1, 1, 1, 1);
 
-		// TODO: this needs to be 2 triangles instead, i heard thats good practice for graphics apis
 
 		glEnable(GL_TEXTURE_2D);
 		glBegin(GL_QUADS);

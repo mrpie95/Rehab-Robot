@@ -9,7 +9,7 @@
 class GestureInterface
 {
 private:
-	const char* name;
+
 public:
 	GestureInterface(const char* name) : name(name) {};
 	virtual ~GestureInterface() {};
@@ -24,7 +24,7 @@ public:
 
 protected:
 	nite::Skeleton skeleton;
-
+	const char* name;
 
 	//x,y,z
 	float euclidDistance3D(nite::Point3f a, nite::Point3f b) { return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2) + pow(a.z - b.z, 2)); }

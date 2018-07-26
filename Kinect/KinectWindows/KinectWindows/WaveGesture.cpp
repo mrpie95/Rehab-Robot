@@ -3,6 +3,11 @@
 
 WaveGesture::WaveGesture(Hand hand): GestureInterface("Wave"), hand(hand)
 {
+	if (hand == Hand::leftHand)
+		name = "Wave left hand";
+	else
+		name = "Wave right hand";
+
 	lastLeftSegmentCorrect = false;
 	lastRightSegmentCorrect = false;
 	correctSegmentCount = 0;

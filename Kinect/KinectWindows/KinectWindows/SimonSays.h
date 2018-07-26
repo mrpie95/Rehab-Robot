@@ -18,8 +18,8 @@
 class SimonSays
 {
 private:
-	Window skeletonWindow;
-	Window camera;
+	Window* skeletonWindow;
+	Window* camera;
 
 	KinectStream* kinectStream;
 	openni::Device kinect;

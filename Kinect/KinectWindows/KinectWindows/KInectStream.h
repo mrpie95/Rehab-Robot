@@ -44,7 +44,6 @@ public:
 	void drawDepthFrame();
 	void drawColorFrame();
 
-	//TODO: is this unethical
 	nite::Skeleton* getUserSkeleton()
 	{
 		if (&PrimeUser != NULL)
@@ -61,6 +60,10 @@ public:
 		return nullptr;
 	}
 
+	bool isUserLost()
+	{
+		return PrimeUser.isLost();
+	}
 
 };
 
