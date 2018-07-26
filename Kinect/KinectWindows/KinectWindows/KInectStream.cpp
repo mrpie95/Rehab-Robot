@@ -10,10 +10,10 @@
 #define NUM_OF_CHUNCKS(dataSize, chunksize) ((((dataSize)-1)/(chunksize)+1))
 #define CHUNCK_SIZE(dataSize, chunksize) (NUM_OF_CHUNCKS(dataSize, chunksize)*(chunksize))
 
-#define COLORSTREAM true
-#define DEPTHSTREAM false
-#define SKELETON true
-#define colorCount = 3
+#define COLORSTREAM 1
+#define DEPTHSTREAM 0
+#define SKELETON 1
+
 
 KinectStream::KinectStream(openni::Device& device, openni::VideoStream& depthStream, openni::VideoStream& colourStream, nite::UserTracker& tracker): 
 	kinect(device), depthStream(depthStream), colourStream(colourStream), tracker(tracker) ,streams(NULL)
