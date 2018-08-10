@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include <string>
 #include <algorithm>
+
 #define TEXTURE_SIZE 512
 
 #define log(x) std::cout << x << std::endl
@@ -435,13 +436,13 @@ void KinectStream::updateUserState(const nite::UserData & user, uint64_t delta)
 		switch (userSkeltonState)
 		{
 		case nite::SKELETON_NONE:
-			log("no tracking");
+			//log("no tracking");
 			break;
 		case nite::SKELETON_CALIBRATING:
-			log("calibrating user");
+			//log("calibrating user");
 			break;
 		case nite::SKELETON_TRACKED:
-			log("Trackingg");
+			//log("Trackingg");
 			break;
 		default:
 			log("error in tracking");

@@ -62,7 +62,7 @@ public:
 
 	bool isUserLost()
 	{
-		return PrimeUser.isLost();
+		return !PrimeUser.isVisible();
 	}
 
 };

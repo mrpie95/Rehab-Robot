@@ -1,8 +1,8 @@
 #include "SimonSays.h"
 #include "WaveGesture.h"
 #include "StandOnOneLeg.h"
-
-#define GESTURE_DEBUG 0
+#include "HandsOutFront.h"
+#define GESTURE_DEBUG 1
 
 #define SIMON_NOT_SAY_CHANCE 0.2f
 
@@ -120,6 +120,7 @@ void SimonSays::init()
 	gestures.push_back(new WaveGesture(Hand::rightHand));
 	gestures.push_back(new WaveGesture(Hand::leftHand));
 	gestures.push_back(new StandOnOneLeg());
+	gestures.push_back(new HandsOutFront());
 }
 
 void SimonSays::run()
@@ -156,9 +157,10 @@ void SimonSays::run()
 			for (auto g : gestures)
 			{
 				g->updateSkeleton(*kinectStream->getUserSkeleton());
+				g->updateUserHeight();
 				if (g->checkForGesture())
 				{
-					log(g->getName());
+					log(g->getHeight());
 				}
 			}
 		}
@@ -193,7 +195,12 @@ void SimonSays::run()
 				if (simonSays)
 				{
 					if (first)
-						std::cout << "Simon says " << gestureSelected->getName() << std::endl;
+					{
+						std::string output = "Simon says ";
+						output = output + gestureSelected->getName();
+						log(output);
+					}
+						
 					first = false;
 
 

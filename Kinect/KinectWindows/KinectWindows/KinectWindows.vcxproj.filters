@@ -48,6 +48,9 @@
     <ClCompile Include="StandOnOneLeg.cpp">
       <Filter>Gestures</Filter>
     </ClCompile>
+    <ClCompile Include="HandsOutFront.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -76,6 +79,9 @@
     </ClInclude>
     <ClInclude Include="StandOnOneLeg.h">
       <Filter>Gestures\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HandsOutFront.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

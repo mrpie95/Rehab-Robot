@@ -28,7 +28,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -147,6 +147,7 @@
     <ClCompile Include="HandsOnHead.cpp" />
     <ClCompile Include="HandsOnHips.cpp" />
     <ClCompile Include="HandsOnShoulders.cpp" />
+    <ClCompile Include="HandsOutFront.cpp" />
     <ClCompile Include="KInectStream.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SimonSays.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="HandsOnHead.h" />
     <ClInclude Include="HandsOnHips.h" />
     <ClInclude Include="HandsOnShoulders.h" />
+    <ClInclude Include="HandsOutFront.h" />
     <ClInclude Include="KInectStream.h" />
     <ClInclude Include="SimonSays.h" />
     <ClInclude Include="StandOnOneLeg.h" />

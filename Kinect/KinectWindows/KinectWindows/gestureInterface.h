@@ -9,7 +9,7 @@
 class GestureInterface
 {
 private:
-
+	int userHeight = 0;
 public:
 	GestureInterface(const char* name) : name(name) {};
 	virtual ~GestureInterface() {};
@@ -19,7 +19,14 @@ public:
 	nite::Skeleton getSkeleton() { return skeleton; }
 	const char* getName() { return name; }
 	void updateSkeleton(nite::Skeleton skelly) { this->skeleton = skelly; }
-
+	int getHeight() { return userHeight; }
+	
+	void updateUserHeight()
+	{
+		userHeight = euclidDistance3D(this->getHeadPos(), this->getLeftShoulderPos()) 
+			+ euclidDistance3D(this->getLeftShoulderPos(), this->getLeftHipPos()) + euclidDistance3D(this->getLeftHipPos(), this->getLeftKneePos())
+			+ euclidDistance3D(this->getLeftKneePos(), this->getLeftFootPos());
+	}
 
 
 protected:
