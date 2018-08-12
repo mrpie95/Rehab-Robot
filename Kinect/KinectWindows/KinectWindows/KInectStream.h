@@ -5,6 +5,27 @@
 #include <memory>
 #include "gestureInterface.h"
 
+struct QuadData
+{
+	int topLeftX, topLeftY;
+	int topRightX, topRightY;
+	int bottomLeftX, bottomLeftY;
+	int bottomRightX, bottomRightY;
+	int width, height;
+
+	QuadData(int topLeftX, int topLeftY, int height, int width) : topLeftX(topLeftX), topLeftY(topLeftY), width(width), height(height)
+	{
+		topRightX = topLeftX + width;
+		topRightY = topLeftY;
+
+		bottomLeftX = topLeftX;
+		bottomLeftY = topLeftY + height;
+
+		bottomRightX = topLeftX + width;
+		bottomRightY = topLeftY + height;
+	}
+};
+
 class KinectStream
 {
 private:
@@ -41,8 +62,8 @@ public:
 	void run();
 	void runTracker();
 
-	void drawDepthFrame();
-	void drawColorFrame();
+	void drawDepthFrame(const QuadData&);
+	void drawColorFrame(const QuadData&);
 
 	nite::Skeleton* getUserSkeleton()
 	{

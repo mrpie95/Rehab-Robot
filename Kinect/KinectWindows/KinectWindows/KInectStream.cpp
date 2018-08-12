@@ -11,11 +11,6 @@
 #define NUM_OF_CHUNCKS(dataSize, chunksize) ((((dataSize)-1)/(chunksize)+1))
 #define CHUNCK_SIZE(dataSize, chunksize) (NUM_OF_CHUNCKS(dataSize, chunksize)*(chunksize))
 
-#define COLORSTREAM 1
-#define DEPTHSTREAM 0
-#define SKELETON 1
-
-
 KinectStream::KinectStream(openni::Device& device, openni::VideoStream& depthStream, openni::VideoStream& colourStream, nite::UserTracker& tracker): 
 	kinect(device), depthStream(depthStream), colourStream(colourStream), tracker(tracker) ,streams(NULL)
 {
@@ -29,9 +24,8 @@ KinectStream::~KinectStream()
 void KinectStream::init()
 {
 
-	streams = new openni::VideoStream*[2];
+	streams = new openni::VideoStream*[1];
 
-	openni::VideoMode depthMode;
 	openni::VideoMode colourMode;
 
 	int colourResolutionX;
@@ -39,7 +33,6 @@ void KinectStream::init()
 	int depthResolutionX;
 	int depthResolutionY;
 
-#if (COLORSTREAM && !DEPTHSTREAM)
 	if (colourStream.isValid())
 	{
 		
@@ -54,53 +47,10 @@ void KinectStream::init()
 	else
 	{
 		log("No color streams found");
-		exit(1);
+		return;
 	}
 
 	streams[0] = &colourStream;
-
-#elif (DEPTHSTREAM && !COLORSTREAM)
-	if (depthStream.isValid())
-	{
-		depthMode = depthStream.getVideoMode();
-		depthResolutionX = depthMode.getResolutionX();
-		depthResolutionY = depthMode.getResolutionY();
-
-		streamWidth = depthResolutionX;
-		streamHeight = depthResolutionY;
-	}
-	else
-	{
-		log("no depth streams found");
-		exit(1);
-	}
-
-	streams[0] = &depthStream;
-#else
-	if (depthStream.isValid() && colourStream.isValid())
-	{
-		depthMode = depthStream.getVideoMode();
-		colourMode = colourStream.getVideoMode();
-
-		colourResolutionX = colourMode.getResolutionX();
-		colourResolutionY = colourMode.getResolutionY();
-		depthResolutionX = depthMode.getResolutionX();
-		depthResolutionY = depthMode.getResolutionY();
-
-		streamWidth = depthResolutionX;
-		streamHeight = depthResolutionY;
-	}
-	else
-	{
-		log("no streams found");
-		exit(1);
-	}
-
-	streams[0] = &colourStream;
-	streams[1] = &depthStream;
-
-#endif
-
 
 	colorTextureMapX = CHUNCK_SIZE(streamWidth, 512);
 	colorTextureMapY = CHUNCK_SIZE(streamHeight, 512);
@@ -114,15 +64,7 @@ void KinectStream::init()
 void KinectStream::run()
 {
 	int index = -1;
-	int streamCount = 0;
-	
-
-#if (COLORSTREAM && DEPTHSTREAM)
-	streamCount = 2;
-#elif (COLORSTREAM || DEPTHSTREAM)
-	streamCount = 1;
-#endif
-
+	int streamCount = 1;
 
 	openni::Status streamStatus = openni::OpenNI::waitForAnyStream(streams, streamCount, &index, openni::TIMEOUT_FOREVER);
 
@@ -132,34 +74,11 @@ void KinectStream::run()
 		return;
 	}
 
-#if (COLORSTREAM && DEPTHSTREAM)
-	if (index == 0)
-	{
-		colourStream.readFrame(&colourFrame);
-	}
-	else if (index == 1)
-	{
-		depthStream.readFrame(&depthFrame);
-	
-	}
-	else
-	{
-		log("failed to read frame, how did you get here?");
-	}
-
-#elif (COLORSTREAM && !DEPTHSTREAM)
 	if (index == 0)
 		colourStream.readFrame(&colourFrame);
 	else
 		log("failed to read frame, how did you get here?");
 
-#elif (!COLORSTREAM && DEPTHSTREAM)
-	if (index == 0)
-		depthStream.readFrame(&depthFrame);
-	else
-		log("failed to read depth frame, how did you get here?");
-#endif
-	
 	
 }
 
@@ -168,7 +87,7 @@ void KinectStream::run()
 // NOTE: Swap opengl contexts before drawing
 //
 
-void KinectStream::drawDepthFrame()
+void KinectStream::drawDepthFrame(const QuadData& pos)
 {
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -216,26 +135,26 @@ void KinectStream::drawDepthFrame()
 
 		//topleft vertex
 		glTexCoord2f(0, 0);
-		glVertex2f(0, 0);
+		glVertex2f(pos.topLeftX, pos.topLeftY);
 
 		//topright 
-		glTexCoord2f((float)streamWidth / (float)colorTextureMapX, 0);
-		glVertex2f(800, 0);
+		glTexCoord2f((float)pos.width / (float)colorTextureMapX, 0);
+		glVertex2f(pos.topRightX, pos.topRightY);
 
 		//bottomright
-		glTexCoord2f((float)streamWidth / (float)colorTextureMapX, (float)streamHeight / (float)colorTextureMapY);
-		glVertex2f(800, 600);
+		glTexCoord2f((float)pos.width / (float)colorTextureMapX, (float)pos.height / (float)colorTextureMapY);
+		glVertex2f(pos.bottomRightX, pos.bottomRightY);
 
 
 		//bottomleft
-		glTexCoord2f(0, (float)streamHeight / (float)colorTextureMapY);
-		glVertex2f(0, 600);
+		glTexCoord2f(0, (float)pos.height / (float)colorTextureMapY);
+		glVertex2f(pos.bottomLeftX, pos.bottomLeftY);
 
 		glEnd();
 	}
 }
 
-void KinectStream::drawColorFrame()
+void KinectStream::drawColorFrame(const QuadData& pos)
 {
 	
 
@@ -266,7 +185,7 @@ void KinectStream::drawColorFrame()
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
 		glLoadIdentity();
-		glOrtho(0, 800, 600, 0, -1.0f, 1.0f);
+		glOrtho(0, 800.0f, 600.0f, 0, -1.0f, 1.0f);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); //what type of varible name is GL_LINEAR_MIPMAP_LINEAR
@@ -281,20 +200,20 @@ void KinectStream::drawColorFrame()
 
 		//topleft vertex
 		glTexCoord2f(0, 0);
-		glVertex2f(0, 0);
+		glVertex2f(pos.topLeftX, pos.topLeftY);
 
 		//topright 
-		glTexCoord2f((float)streamWidth / (float)colorTextureMapX, 0);
-		glVertex2f(800, 0);
+		glTexCoord2f((float)pos.width / (float)colorTextureMapX, 0);
+		glVertex2f(pos.topRightX, pos.topRightY);
 
 		//bottomright
-		glTexCoord2f((float)streamWidth / (float)colorTextureMapX, (float)streamHeight / (float)colorTextureMapY);
-		glVertex2f(800, 600);
+		glTexCoord2f((float)pos.width / (float)colorTextureMapX, (float)pos.height / (float)colorTextureMapY);
+		glVertex2f(pos.bottomRightX, pos.bottomRightY);
 
 
 		//bottomleft
-		glTexCoord2f(0, (float)streamHeight / (float)colorTextureMapY);
-		glVertex2f(0, 600);
+		glTexCoord2f(0, (float)pos.height / (float)colorTextureMapY);
+		glVertex2f(pos.bottomLeftX, pos.bottomLeftY);
 
 		glEnd();
 		glDisable(GL_TEXTURE_2D);
@@ -410,6 +329,7 @@ void KinectStream::DrawSkeleton(nite::UserTracker* pUserTracker, const nite::Use
 }
 
 
+//TODO: fix this
 bool temp = false;
 void KinectStream::updateUserState(const nite::UserData & user, uint64_t delta)
 {
@@ -461,7 +381,7 @@ void KinectStream::runTracker()
 		return;
 	}
 
-	
+	depthFrame = trackerFrame.getDepthFrame();
 
 	const nite::UserMap& userLabels = trackerFrame.getUserMap();
 
