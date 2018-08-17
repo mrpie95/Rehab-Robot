@@ -89,14 +89,6 @@ void KinectStream::run()
 
 void KinectStream::drawDepthFrame(const QuadData& pos)
 {
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	glOrtho(0, 800, 600, 0, -1.0f, 1.0f);
-
 	//file texture map with 0s
 	memset(depthTextureMap, 0, colorTextureMapX*colorTextureMapY * sizeof(openni::Grayscale16Pixel));
 
@@ -116,9 +108,9 @@ void KinectStream::drawDepthFrame(const QuadData& pos)
 			for (size_t j = 0; j < depthFrame.getWidth(); j++, depthPixel++, pixelTexture++)
 			{
 				// TODO: fix this 16bit depthpixel to 24bit rgb
-				pixelTexture->r = *depthPixel / 0xff;
-				pixelTexture->g = (*depthPixel << 8)/0xff;
-				pixelTexture->b = 0;
+				pixelTexture->r = (*depthPixel / 0xff) + 255;
+				pixelTexture->g = (*depthPixel / 0xff) + 255;
+				pixelTexture->b = (*depthPixel / 0xff) + 255;
 			}
 			depthRow += rowBufferSize;
 			textureRow += colorTextureMapX;
@@ -131,30 +123,31 @@ void KinectStream::drawDepthFrame(const QuadData& pos)
 
 		glColor4f(1, 1, 1, 1);
 
+		glEnable(GL_TEXTURE_2D);
 		glBegin(GL_QUADS);
 
-		//topleft vertex
 		glTexCoord2f(0, 0);
 		glVertex2f(pos.topLeftX, pos.topLeftY);
 
 		//topright 
-		glTexCoord2f((float)pos.width / (float)colorTextureMapX, 0);
+		glTexCoord2f((float)streamWidth / (float)colorTextureMapX, 0);
 		glVertex2f(pos.topRightX, pos.topRightY);
 
 		//bottomright
-		glTexCoord2f((float)pos.width / (float)colorTextureMapX, (float)pos.height / (float)colorTextureMapY);
+		glTexCoord2f((float)streamWidth / (float)colorTextureMapX, (float)streamHeight / (float)colorTextureMapY);
 		glVertex2f(pos.bottomRightX, pos.bottomRightY);
 
 
 		//bottomleft
-		glTexCoord2f(0, (float)pos.height / (float)colorTextureMapY);
+		glTexCoord2f(0, (float)streamHeight / (float)colorTextureMapY);
 		glVertex2f(pos.bottomLeftX, pos.bottomLeftY);
 
 		glEnd();
+		glDisable(GL_TEXTURE_2D);
 	}
 }
 
-void KinectStream::drawColorFrame(const QuadData& pos)
+void KinectStream::drawColorFrame(const QuadData& pos, int width, int height)
 {
 	
 
@@ -185,7 +178,9 @@ void KinectStream::drawColorFrame(const QuadData& pos)
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
 		glLoadIdentity();
-		glOrtho(0, 800.0f, 600.0f, 0, -1.0f, 1.0f);
+		glOrtho(0, width, height, 0, -1.0f, 1.0f);
+		glViewport(0,0,width,height);
+
 
 		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); //what type of varible name is GL_LINEAR_MIPMAP_LINEAR
@@ -203,16 +198,16 @@ void KinectStream::drawColorFrame(const QuadData& pos)
 		glVertex2f(pos.topLeftX, pos.topLeftY);
 
 		//topright 
-		glTexCoord2f((float)pos.width / (float)colorTextureMapX, 0);
+		glTexCoord2f((float)streamWidth / (float)colorTextureMapX, 0);
 		glVertex2f(pos.topRightX, pos.topRightY);
-
+		
 		//bottomright
-		glTexCoord2f((float)pos.width / (float)colorTextureMapX, (float)pos.height / (float)colorTextureMapY);
+		glTexCoord2f((float)streamWidth / (float)colorTextureMapX, (float)streamHeight / (float)colorTextureMapY);
 		glVertex2f(pos.bottomRightX, pos.bottomRightY);
 
 
 		//bottomleft
-		glTexCoord2f(0, (float)pos.height / (float)colorTextureMapY);
+		glTexCoord2f(0, (float)streamHeight / (float)colorTextureMapY);
 		glVertex2f(pos.bottomLeftX, pos.bottomLeftY);
 
 		glEnd();
@@ -222,7 +217,7 @@ void KinectStream::drawColorFrame(const QuadData& pos)
 	}
 }
 
-void KinectStream::DrawLimb(nite::UserTracker* pUserTracker, const nite::SkeletonJoint& joint1, const nite::SkeletonJoint& joint2, const nite::UserData& user)
+void KinectStream::DrawLimb(nite::UserTracker* pUserTracker, const nite::SkeletonJoint& joint1, const nite::SkeletonJoint& joint2, const nite::UserData& user, const QuadData& pos)
 {
 	bool prime = false;
 	if (PrimeUser.getId() == user.getId())
@@ -235,10 +230,10 @@ void KinectStream::DrawLimb(nite::UserTracker* pUserTracker, const nite::Skeleto
 	pUserTracker->convertJointCoordinatesToDepth(joint1.getPosition().x, joint1.getPosition().y, joint1.getPosition().z, &coordinates[0], &coordinates[1]);
 	pUserTracker->convertJointCoordinatesToDepth(joint2.getPosition().x, joint2.getPosition().y, joint2.getPosition().z, &coordinates[3], &coordinates[4]);
 
-	coordinates[0] *= 800.0f/(float)streamWidth;
-	coordinates[1] *= 600.0f/(float)streamHeight;
-	coordinates[3] *= 800.0f/(float)streamWidth;
-	coordinates[4] *= 600.0f/(float)streamHeight;
+	coordinates[0] *= pos.width/(float)streamWidth;
+	coordinates[1] *= pos.height/(float)streamHeight;
+	coordinates[3] *= pos.width/(float)streamWidth;
+	coordinates[4] *= pos.height/(float)streamHeight;
 
 	if (joint1.getPositionConfidence() == 1 && joint2.getPositionConfidence() == 1)
 	{
@@ -300,36 +295,36 @@ void KinectStream::DrawLimb(nite::UserTracker* pUserTracker, const nite::Skeleto
 	glDrawArrays(GL_POINTS, 0, 1);
 }
 
-void KinectStream::DrawSkeleton(nite::UserTracker* pUserTracker, const nite::UserData& userData)
+void KinectStream::DrawSkeleton(nite::UserTracker* pUserTracker, const nite::UserData& userData, const QuadData& pos)
 {
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_HEAD), userData.getSkeleton().getJoint(nite::JOINT_NECK), userData);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_HEAD), userData.getSkeleton().getJoint(nite::JOINT_NECK), userData, pos);
 
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_LEFT_ELBOW), userData);
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_ELBOW), userData.getSkeleton().getJoint(nite::JOINT_LEFT_HAND), userData);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_LEFT_ELBOW), userData, pos);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_ELBOW), userData.getSkeleton().getJoint(nite::JOINT_LEFT_HAND), userData, pos);
 
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_ELBOW), userData);
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_ELBOW), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_HAND), userData);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_ELBOW), userData, pos);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_ELBOW), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_HAND), userData, pos);
 
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_SHOULDER), userData);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_SHOULDER), userData,pos);
 
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_TORSO), userData);
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_TORSO), userData);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_TORSO), userData,pos);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_TORSO), userData, pos);
 
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_TORSO), userData.getSkeleton().getJoint(nite::JOINT_LEFT_HIP), userData);
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_TORSO), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_HIP), userData);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_TORSO), userData.getSkeleton().getJoint(nite::JOINT_LEFT_HIP), userData, pos);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_TORSO), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_HIP), userData, pos);
 
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_HIP), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_HIP), userData);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_HIP), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_HIP), userData, pos);
 
 
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_HIP), userData.getSkeleton().getJoint(nite::JOINT_LEFT_KNEE), userData);
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_KNEE), userData.getSkeleton().getJoint(nite::JOINT_LEFT_FOOT), userData);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_HIP), userData.getSkeleton().getJoint(nite::JOINT_LEFT_KNEE), userData, pos);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_KNEE), userData.getSkeleton().getJoint(nite::JOINT_LEFT_FOOT), userData, pos);
 
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_HIP), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_KNEE), userData);
-	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_KNEE), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_FOOT), userData);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_HIP), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_KNEE), userData, pos);
+	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_RIGHT_KNEE), userData.getSkeleton().getJoint(nite::JOINT_RIGHT_FOOT), userData, pos);
 }
 
 
-//TODO: fix this
+//TODO: no such thing as to many global vars
 bool temp = false;
 void KinectStream::updateUserState(const nite::UserData & user, uint64_t delta)
 {
@@ -371,7 +366,7 @@ void KinectStream::updateUserState(const nite::UserData & user, uint64_t delta)
 	}
 }
 
-void KinectStream::runTracker()
+void KinectStream::runTracker(const QuadData& pos)
 {
 	nite::Status status = tracker.readFrame(&trackerFrame);
 	users.clear();
@@ -406,12 +401,12 @@ void KinectStream::runTracker()
 		{
 			if (user.getSkeleton().getState() == nite::SKELETON_TRACKED)
 			{
-				glMatrixMode(GL_PROJECTION);
+				/*glMatrixMode(GL_PROJECTION);
 				glPushMatrix();
 				glLoadIdentity();
 
 				glOrtho(0, 800, 600, 0, -1.0, 1.0);
-				glDisable(GL_TEXTURE_2D);
+				glDisable(GL_TEXTURE_2D);*/
 
 				if (user.getPose(nite::POSE_CROSSED_HANDS).isEntered())
 				{
@@ -423,7 +418,7 @@ void KinectStream::runTracker()
 				if (PrimeUser.getId() == user.getId())
 					PrimeUser = user;
 
-				DrawSkeleton(&tracker, user);
+				DrawSkeleton(&tracker, user, pos);
 				
 			}
 		}

@@ -51,8 +51,8 @@ private:
 	std::vector<nite::UserData> users;
 	nite::SkeletonState userSkeltonState = nite::SKELETON_NONE;
 
-	void DrawLimb(nite::UserTracker* pUserTracker, const nite::SkeletonJoint& joint1, const nite::SkeletonJoint& joint2, const nite::UserData& user);
-	void DrawSkeleton(nite::UserTracker* pUserTracker, const nite::UserData& userData);
+	void DrawLimb(nite::UserTracker* pUserTracker, const nite::SkeletonJoint& joint1, const nite::SkeletonJoint& joint2, const nite::UserData& user, const QuadData&);
+	void DrawSkeleton(nite::UserTracker* pUserTracker, const nite::UserData& userData, const QuadData&);
 	void updateUserState(const nite::UserData& user, uint64_t delta);
 public:
 	KinectStream(openni::Device& device, openni::VideoStream& depthStream, openni::VideoStream& colourStream, nite::UserTracker& tracker);
@@ -60,10 +60,10 @@ public:
 
 	void init();
 	void run();
-	void runTracker();
 
+	void runTracker(const QuadData&);
 	void drawDepthFrame(const QuadData&);
-	void drawColorFrame(const QuadData&);
+	void drawColorFrame(const QuadData&, int, int);
 
 	nite::Skeleton* getUserSkeleton()
 	{

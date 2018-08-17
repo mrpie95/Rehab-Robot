@@ -140,17 +140,19 @@ void SimonSays::run()
 	for (;;) {
 		SDL_PollEvent(&e); 
 		kinectStream->run();
-		QuadData temp = QuadData(0, 0, camera->getHeight(), camera->getWidth());
 
-		kinectStream->drawColorFrame(temp);
+		QuadData temp = QuadData(0, camera->getHeight()/2, camera->getHeight()/2, camera->getWidth()/2);
+		kinectStream->drawColorFrame(temp, camera->getWidth(), camera->getHeight());
+		kinectStream->drawDepthFrame(QuadData(camera->getWidth()/2, 0, camera->getHeight() / 2, camera->getWidth() / 2));
 		//kinectStream->runTracker();
 		camera->FlipBuffers();
 		camera->updateWindowParams();
 
 		SDL_GL_MakeCurrent(skeletonWindow->getWindow(), skeletonWindow->getOpenGLContext());
-		kinectStream->runTracker();
+		kinectStream->runTracker(QuadData(0,0, skeletonWindow->getHeight(), skeletonWindow->getWidth()));
 		skeletonWindow->FlipBuffers();
-
+		skeletonWindow->updateWindowParams();
+		
 		SDL_GL_MakeCurrent(camera->getWindow(), camera->getOpenGLContext());
 		
 	
