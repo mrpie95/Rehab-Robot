@@ -1,27 +1,17 @@
+#include <stdio.h>
 #include <iostream>
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 
-
-
-
-//check for OS
-#ifdef __WIN32__ //winows
-# include <winsock2.h>
-#else //linux
-# include <sys/socket.h>
-# include <netinet/in.h>
-#endif
- 
-static void usage();
- 
 int main(int argc, char *argv[])
 {
     if (argc > 1 && *(argv[1]) == '-')
     {
-        usage(); exit(1);
+        //usage(); exit(1);
     }
  
     int listenPort = 1234;
@@ -56,9 +46,6 @@ int main(int argc, char *argv[])
     struct linger linger_opt = { 1, 0 }; // Linger active, timeout 0
 	
 	
-	//setsockopt(s0, SOL_SOCKET, SO_LINGER, &linger_opt, );
-
-	
     setsockopt(s0, SOL_SOCKET, SO_LINGER, &linger_opt, sizeof(linger_opt));
  
     // Now, listen for a connection
@@ -73,6 +60,9 @@ int main(int argc, char *argv[])
     // no timeout limit...)
     struct sockaddr_in peeraddr;
     socklen_t peeraddr_len;
+	
+	std::cerr << "Waiting for client";
+	
     int s1 = accept(s0, (struct sockaddr*) &peeraddr, &peeraddr_len);
     if (s1 < 0)
     {
@@ -95,6 +85,7 @@ int main(int argc, char *argv[])
     write(s1, "Hello!\r\n", 8);
  
     char buffer[1024];
+	
     res = read(s1, buffer, 1023);
     if (res < 0) {
         std::cerr << "Error: " << strerror(errno) << std::endl;
@@ -107,12 +98,3 @@ int main(int argc, char *argv[])
     return 0;
 }
  
-static void usage() {
-    std::cout << "A simple Internet server application.\n"
-              << "It listens to the port written in command line (default 1234),\n"
-              << "accepts a connection, and sends the \"Hello!\" message to a client.\n"
-              << "Then it receives the answer from a client and terminates.\n\n"
-              << "Usage:\n"
-              << "     server [port_to_listen]\n"
-              << "Default is the port 1234.\n";
-}
