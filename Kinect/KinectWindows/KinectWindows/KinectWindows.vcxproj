@@ -104,7 +104,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)\libs\Nite2\Include;$(ProjectDir)\libs\OpenNI2\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(ProjectDir)\libs\OpenNI2\Lib;$(ProjectDir)\libs\Nite2\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)\libs\OpenNI2\Lib;C:\Users\Michael\Google Drive\Swinburne\SWE40002 FYP\Rehab-Robot\Kinect\KinectWindows\KinectWindows\libs\glew-2.1.0\lib;C:\Users\Michael\Google Drive\Swinburne\SWE40002 FYP\Rehab-Robot\Kinect\KinectWindows\KinectWindows\libs\SDL2-2.0.8\lib;$(ProjectDir)\libs\Nite2\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>OpenNI2.lib;NiTE2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
