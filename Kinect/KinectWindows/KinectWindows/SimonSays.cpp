@@ -3,14 +3,14 @@
 #include "StandOnOneLeg.h"
 #include "HandsOutFront.h"
 #include "SquatGesture.h"
-
+#include <thread>
 #define GESTURE_DEBUG 1
 
 #define SIMON_NOT_SAY_CHANCE 0.2f
 
 SimonSays::SimonSays()
 {
-	camera = new Window("memes", 1280, 960, 160, 200);
+	camera = new Window("memes", 1280, 960, 50, 50);
 }
 
 
@@ -139,17 +139,18 @@ void SimonSays::run()
 	SDL_GL_MakeCurrent(camera->getWindow(), camera->getOpenGLContext());
 	for (;;) {
 		SDL_PollEvent(&e); 
+		elapsed = std::chrono::high_resolution_clock::now() - start;
+		
 		kinectStream->run();
-
 		QuadData temp = QuadData(0, camera->getHeight()/2, camera->getHeight()/2, camera->getWidth()/2);
 		kinectStream->drawColorFrame(temp, camera->getWidth(), camera->getHeight());
 		kinectStream->drawDepthFrame(QuadData(camera->getWidth()/2, 0, camera->getHeight() / 2, camera->getWidth() / 2));
 		kinectStream->runTracker(temp);
-		//kinectStream->drawString("Hello world",0,960-72,0,72);
+		kinectStream->drawString(std::to_string((int)(1/elapsed.count())),0,0,0,32);
 		camera->FlipBuffers();
 		camera->updateWindowParams();
 		
-		
+		start = std::chrono::high_resolution_clock::now();
 	
 #if GESTURE_DEBUG
 		if (kinectStream->getUserSkeleton())
