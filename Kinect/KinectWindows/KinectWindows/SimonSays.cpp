@@ -2,14 +2,15 @@
 #include "WaveGesture.h"
 #include "StandOnOneLeg.h"
 #include "HandsOutFront.h"
+#include "SquatGesture.h"
+
 #define GESTURE_DEBUG 1
 
 #define SIMON_NOT_SAY_CHANCE 0.2f
 
 SimonSays::SimonSays()
 {
-	camera = new Window("Camera", 800, 600, 160, 200);
-	skeletonWindow = new Window("Skeleton", 800,600, 960, 200);
+	camera = new Window("memes", 1280, 960, 160, 200);
 }
 
 
@@ -40,7 +41,6 @@ void SimonSays::init()
 {
 	srand(time(NULL));
 	camera->init();
-	skeletonWindow->init();
 
 	if (openni::OpenNI::initialize() != openni::Status::STATUS_OK)
 	{
@@ -121,10 +121,18 @@ void SimonSays::init()
 	gestures.push_back(new WaveGesture(Hand::leftHand));
 	gestures.push_back(new StandOnOneLeg());
 	gestures.push_back(new HandsOutFront());
+
+	
 }
+
+
+
+
 
 void SimonSays::run()
 {
+
+	GestureInterface* g = new SquatGesture();
 	SDL_Event e;
 	bool playingGame = true;
 	int num = 0;
@@ -135,8 +143,8 @@ void SimonSays::run()
 	bool simonSays;
 	bool first = true;
 	GestureInterface* prevGesture = nullptr;
-
 	//TODO:: it sometimes crashes here
+	SDL_GL_MakeCurrent(camera->getWindow(), camera->getOpenGLContext());
 	for (;;) {
 		SDL_PollEvent(&e); 
 		kinectStream->run();
@@ -144,22 +152,21 @@ void SimonSays::run()
 		QuadData temp = QuadData(0, camera->getHeight()/2, camera->getHeight()/2, camera->getWidth()/2);
 		kinectStream->drawColorFrame(temp, camera->getWidth(), camera->getHeight());
 		kinectStream->drawDepthFrame(QuadData(camera->getWidth()/2, 0, camera->getHeight() / 2, camera->getWidth() / 2));
-		//kinectStream->runTracker();
+		kinectStream->runTracker(temp);
+		kinectStream->drawString("Hello world",0,960-72,0,72);
 		camera->FlipBuffers();
 		camera->updateWindowParams();
-
-		SDL_GL_MakeCurrent(skeletonWindow->getWindow(), skeletonWindow->getOpenGLContext());
-		kinectStream->runTracker(QuadData(0,0, skeletonWindow->getHeight(), skeletonWindow->getWidth()));
-		skeletonWindow->FlipBuffers();
-		skeletonWindow->updateWindowParams();
 		
-		SDL_GL_MakeCurrent(camera->getWindow(), camera->getOpenGLContext());
 		
 	
 #if GESTURE_DEBUG
+
+
+
+
 		if (kinectStream->getUserSkeleton())
 		{
-			for (auto g : gestures)
+			/*for (auto g : gestures)
 			{
 				g->updateSkeleton(*kinectStream->getUserSkeleton());
 				g->updateUserHeight();
@@ -167,7 +174,11 @@ void SimonSays::run()
 				{
 					log(g->getHeight());
 				}
-			}
+			}*/
+			//g->updateSkeleton(*kinectStream->getUserSkeleton());
+			//g->checkForGesture();
+			//log(g->print());
+
 		}
 #else 
 		//simon says starts here

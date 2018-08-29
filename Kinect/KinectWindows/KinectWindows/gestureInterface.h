@@ -15,6 +15,9 @@ public:
 	virtual ~GestureInterface() {};
 
 	virtual bool checkForGesture() = 0;
+	virtual bool checkForDoingGesture() { return false; }
+	virtual std::string print() { return std::string(); }
+
 
 	nite::Skeleton getSkeleton() { return skeleton; }
 	const char* getName() { return name; }

@@ -1,5 +1,7 @@
 #include "WaveGesture.h"
 
+#define CONSECTIVE_SEGMENTS_NEEDED 4
+#define TIME_TO_COMPLETE_WAVE 5.0f
 
 WaveGesture::WaveGesture(Hand hand): GestureInterface("Wave"), hand(hand)
 {
@@ -90,9 +92,6 @@ bool WaveGesture::checkForGesture()
 		right = this->LeftHandRightOfElbow();
 	}
 
-
-
-
 	if ((left || right) && correctSegmentCount == 0)
 	{
 		//start clock
@@ -145,4 +144,14 @@ bool WaveGesture::checkForGesture()
 	
 	return false;
 
+}
+
+bool WaveGesture::checkForDoingGesture() 
+{
+	return correctSegmentCount > 0;
+}
+
+std::string WaveGesture::print()
+{
+	return std::string(std::to_string(correctSegmentCount) + "/" + std::to_string(CONSECTIVE_SEGMENTS_NEEDED) + " Correct Segments");
 }

@@ -3,7 +3,8 @@
 #include <GL/glew.h>
 #include <string>
 #include <algorithm>
-
+#include <FTGL/ftgl.h>
+#include <FTGL/FTPoint.h>
 #define TEXTURE_SIZE 512
 
 #define log(x) std::cout << x << std::endl
@@ -12,7 +13,7 @@
 #define CHUNCK_SIZE(dataSize, chunksize) (NUM_OF_CHUNCKS(dataSize, chunksize)*(chunksize))
 
 KinectStream::KinectStream(openni::Device& device, openni::VideoStream& depthStream, openni::VideoStream& colourStream, nite::UserTracker& tracker): 
-	kinect(device), depthStream(depthStream), colourStream(colourStream), tracker(tracker) ,streams(NULL)
+	kinect(device), depthStream(depthStream), colourStream(colourStream), tracker(tracker) ,streams(NULL), font("fonts/arial.ttf")
 {
 }
 
@@ -57,6 +58,9 @@ void KinectStream::init()
 	colorTextureMap = new openni::RGB888Pixel[colorTextureMapX * colorTextureMapY];
 	depthTextureMap = new openni::RGB888Pixel[colorTextureMapX * colorTextureMapY];
 
+	if (font.Error())
+		log("Failed to load in font file");
+
 }
 
 
@@ -86,6 +90,7 @@ void KinectStream::run()
 //
 // NOTE: Swap opengl contexts before drawing
 //
+
 
 void KinectStream::drawDepthFrame(const QuadData& pos)
 {
@@ -217,6 +222,12 @@ void KinectStream::drawColorFrame(const QuadData& pos, int width, int height)
 	}
 }
 
+void KinectStream::drawString(const char *string, float x, float y, float z, int size)
+{
+	font.FaceSize(size);
+	font.Render(string, -1, FTPoint(x,y,z));
+}
+
 void KinectStream::DrawLimb(nite::UserTracker* pUserTracker, const nite::SkeletonJoint& joint1, const nite::SkeletonJoint& joint2, const nite::UserData& user, const QuadData& pos)
 {
 	bool prime = false;
@@ -234,6 +245,11 @@ void KinectStream::DrawLimb(nite::UserTracker* pUserTracker, const nite::Skeleto
 	coordinates[1] *= pos.height/(float)streamHeight;
 	coordinates[3] *= pos.width/(float)streamWidth;
 	coordinates[4] *= pos.height/(float)streamHeight;
+
+	coordinates[0] += pos.topLeftX;
+	coordinates[1] += pos.topLeftY;
+	coordinates[3] += pos.topLeftX;
+	coordinates[4] += pos.topLeftY;
 
 	if (joint1.getPositionConfidence() == 1 && joint2.getPositionConfidence() == 1)
 	{
@@ -297,6 +313,8 @@ void KinectStream::DrawLimb(nite::UserTracker* pUserTracker, const nite::Skeleto
 
 void KinectStream::DrawSkeleton(nite::UserTracker* pUserTracker, const nite::UserData& userData, const QuadData& pos)
 {
+	
+
 	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_HEAD), userData.getSkeleton().getJoint(nite::JOINT_NECK), userData, pos);
 
 	DrawLimb(pUserTracker, userData.getSkeleton().getJoint(nite::JOINT_LEFT_SHOULDER), userData.getSkeleton().getJoint(nite::JOINT_LEFT_ELBOW), userData, pos);
@@ -419,6 +437,7 @@ void KinectStream::runTracker(const QuadData& pos)
 					PrimeUser = user;
 
 				DrawSkeleton(&tracker, user, pos);
+				DrawSkeleton(&tracker, user, QuadData(pos.width	,pos.topLeftY,pos.width,pos.height));
 				
 			}
 		}

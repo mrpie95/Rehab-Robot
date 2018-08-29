@@ -2,8 +2,6 @@
 #include "gestureInterface.h"
 #include <chrono>
 
-#define CONSECTIVE_SEGMENTS_NEEDED 4
-#define TIME_TO_COMPLETE_WAVE 5.0f
 enum Hand
 {
 	leftHand,
@@ -35,5 +33,7 @@ public:
 
 
 	bool checkForGesture();
+	bool checkForDoingGesture() override;
+	std::string print() override;
 };
 

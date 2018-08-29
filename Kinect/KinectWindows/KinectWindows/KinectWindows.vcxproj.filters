@@ -51,6 +51,9 @@
     <ClCompile Include="HandsOutFront.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SquatGesture.cpp">
+      <Filter>Gestures</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -82,6 +85,9 @@
     </ClInclude>
     <ClInclude Include="HandsOutFront.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SquatGesture.h">
+      <Filter>Gestures\Headers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
