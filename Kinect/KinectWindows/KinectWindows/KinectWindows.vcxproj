@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GestureRecEngine.cpp" />
     <ClCompile Include="HandsOnHead.cpp" />
     <ClCompile Include="HandsOnHips.cpp" />
     <ClCompile Include="HandsOnShoulders.cpp" />
@@ -157,11 +158,13 @@
     <ClCompile Include="SimonSays.cpp" />
     <ClCompile Include="SquatGesture.cpp" />
     <ClCompile Include="StandOnOneLeg.cpp" />
+    <ClCompile Include="User.cpp" />
     <ClCompile Include="WaveGesture.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gestureInterface.h" />
+    <ClInclude Include="GestureRecEngine.h" />
     <ClInclude Include="HandsOnHead.h" />
     <ClInclude Include="HandsOnHips.h" />
     <ClInclude Include="HandsOnShoulders.h" />
@@ -170,6 +173,7 @@
     <ClInclude Include="SimonSays.h" />
     <ClInclude Include="SquatGesture.h" />
     <ClInclude Include="StandOnOneLeg.h" />
+    <ClInclude Include="User.h" />
     <ClInclude Include="WaveGesture.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>

@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <FTGL/ftgl.h>
 #include <FTGL/FTPoint.h>
+#include <sstream>
 #define TEXTURE_SIZE 512
 
 #define log(x) std::cout << x << std::endl
@@ -222,10 +223,20 @@ void KinectStream::drawColorFrame(const QuadData& pos, int width, int height)
 	}
 }
 
-void KinectStream::drawString(const char *string, float x, float y, float z, int size)
+void KinectStream::drawString(std::string string, float x, float y, float z, int size)
 {
 	font.FaceSize(size);
-	font.Render(string, -1, FTPoint(x,y,z));
+	std::istringstream s(string);
+	std::string line;
+	int lineCount = 0;
+
+	while (std::getline(s,line))
+	{
+		font.Render(line.c_str(), -1, FTPoint(x, y -(lineCount*size),z));
+		lineCount++;
+	}
+	
+
 }
 
 void KinectStream::DrawLimb(nite::UserTracker* pUserTracker, const nite::SkeletonJoint& joint1, const nite::SkeletonJoint& joint2, const nite::UserData& user, const QuadData& pos)

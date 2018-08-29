@@ -114,15 +114,7 @@ void SimonSays::init()
 	kinectStream->init();
 
 
-	gestures.push_back(new HandsOnHead());
-	gestures.push_back(new HandsOnHips());
-	gestures.push_back(new HandsOnShoulders());
-	gestures.push_back(new WaveGesture(Hand::rightHand));
-	gestures.push_back(new WaveGesture(Hand::leftHand));
-	gestures.push_back(new StandOnOneLeg());
-	gestures.push_back(new HandsOutFront());
-
-	
+	user.initGestureChecker();
 }
 
 
@@ -153,33 +145,19 @@ void SimonSays::run()
 		kinectStream->drawColorFrame(temp, camera->getWidth(), camera->getHeight());
 		kinectStream->drawDepthFrame(QuadData(camera->getWidth()/2, 0, camera->getHeight() / 2, camera->getWidth() / 2));
 		kinectStream->runTracker(temp);
-		kinectStream->drawString("Hello world",0,960-72,0,72);
+		//kinectStream->drawString("Hello world",0,960-72,0,72);
 		camera->FlipBuffers();
 		camera->updateWindowParams();
 		
 		
 	
 #if GESTURE_DEBUG
-
-
-
-
 		if (kinectStream->getUserSkeleton())
 		{
-			/*for (auto g : gestures)
-			{
-				g->updateSkeleton(*kinectStream->getUserSkeleton());
-				g->updateUserHeight();
-				if (g->checkForGesture())
-				{
-					log(g->getHeight());
-				}
-			}*/
-			//g->updateSkeleton(*kinectStream->getUserSkeleton());
-			//g->checkForGesture();
-			//log(g->print());
-
+			user.update(*kinectStream->getUserSkeleton());
 		}
+
+		kinectStream->drawString(user.print().c_str(), 0, camera->getHeight()-32, 0, 32);
 #else 
 		//simon says starts here
 		elapsed = std::chrono::high_resolution_clock::now() - start;

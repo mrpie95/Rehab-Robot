@@ -71,7 +71,7 @@ public:
 	void runTracker(const QuadData& pos);
 	void drawDepthFrame(const QuadData&);
 	void drawColorFrame(const QuadData&, int, int);
-	void drawString(const char*, float x, float y, float z, int size);
+	void drawString(std::string, float x, float y, float z, int size);
 
 	nite::Skeleton* getUserSkeleton()
 	{

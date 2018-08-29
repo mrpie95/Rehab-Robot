@@ -10,7 +10,7 @@
 #include <ctime>
 #include <string>
 #include <chrono>
-
+#include "User.h"
 #define log(x) std::cout << x << std::endl;
 
 #define SIMON_NOT_SAY_CHANCE 0.2f
@@ -18,7 +18,6 @@
 class SimonSays
 {
 private:
-	Window* skeletonWindow;
 	Window* camera;
 
 	KinectStream* kinectStream;
@@ -26,8 +25,7 @@ private:
 	openni::VideoStream depth, color;
 	nite::UserTracker tracker;
 	nite::Skeleton* skeleton;
-
-	std::vector<GestureInterface*> gestures;
+	User user;
 
 	int getRandomNumber(int max);
 	bool roll();
