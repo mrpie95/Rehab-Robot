@@ -18,8 +18,6 @@
 class SimonSays
 {
 private:
-	Window* camera;
-
 	KinectStream* kinectStream;
 	openni::Device kinect;
 	openni::VideoStream depth, color;

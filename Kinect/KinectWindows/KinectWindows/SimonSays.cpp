@@ -10,7 +10,7 @@
 
 SimonSays::SimonSays()
 {
-	camera = new Window("memes", 1280, 960, 50, 50);
+
 }
 
 
@@ -39,86 +39,12 @@ bool SimonSays::roll()
 
 void SimonSays::init()
 {
-	srand(time(NULL));
-	camera->init();
-
-	if (openni::OpenNI::initialize() != openni::Status::STATUS_OK)
-	{
-		log(openni::OpenNI::getExtendedError());
-	}
-	else
-	{
-		log("OpenNI succefully initilized");
-	}
-
-	nite::NiTE::initialize();
-
-
-	openni::Array<openni::DeviceInfo> devices;
-	openni::OpenNI::enumerateDevices(&devices);
-	for (int i = 0; i < devices.getSize(); i++)
-	{
-		log(devices[i].getName());
-	}
-
-	const char* deviceuri = openni::ANY_DEVICE;
-	openni::Status kinectStatus = kinect.open(deviceuri);
-
-	if (kinectStatus != openni::Status::STATUS_OK)
-	{
-		log(openni::OpenNI::getExtendedError());
-	}
-	else
-	{
-		log("Kinect URI successfully opened");
-	}
-
-	if (tracker.create(&kinect) != openni::Status::STATUS_OK)
-	{
-		log("failed to create traker");
-	}
-
-	kinectStatus = depth.create(kinect, openni::SENSOR_DEPTH);
-
-	if (kinectStatus == openni::Status::STATUS_OK)
-	{
-		kinectStatus = depth.start();
-		if (kinectStatus != openni::Status::STATUS_OK)
-		{
-			log(openni::OpenNI::getExtendedError());
-			depth.destroy();
-		}
-	}
-	else
-	{
-		log(openni::OpenNI::getExtendedError());
-	}
-
-	kinectStatus = color.create(kinect, openni::SENSOR_COLOR);
-
-	if (kinectStatus == openni::Status::STATUS_OK)
-	{
-		kinectStatus = color.start();
-		if (kinectStatus != openni::Status::STATUS_OK)
-		{
-			log(openni::OpenNI::getExtendedError());
-			color.destroy();
-		}
-	}
-	else
-	{
-		log(openni::OpenNI::getExtendedError());
-	}
-	
-	kinectStream = new KinectStream(kinect, depth, color, tracker);
+	kinectStream = new KinectStream();
 	kinectStream->init();
 
 
 	user.initGestureChecker();
 }
-
-
-
 
 
 void SimonSays::run()
@@ -135,21 +61,15 @@ void SimonSays::run()
 	bool simonSays;
 	bool first = true;
 	GestureInterface* prevGesture = nullptr;
+
 	//TODO:: it sometimes crashes here
-	SDL_GL_MakeCurrent(camera->getWindow(), camera->getOpenGLContext());
 	for (;;) {
 		SDL_PollEvent(&e); 
 		elapsed = std::chrono::high_resolution_clock::now() - start;
-		
+	
 		kinectStream->run();
-		QuadData temp = QuadData(0, camera->getHeight()/2, camera->getHeight()/2, camera->getWidth()/2);
-		kinectStream->drawColorFrame(temp, camera->getWidth(), camera->getHeight());
-		kinectStream->drawDepthFrame(QuadData(camera->getWidth()/2, 0, camera->getHeight() / 2, camera->getWidth() / 2));
-		kinectStream->runTracker(temp);
-		kinectStream->drawString(std::to_string((int)(1/elapsed.count())),0,0,0,32);
-		camera->FlipBuffers();
-		camera->updateWindowParams();
 		
+		kinectStream->drawString(std::to_string((int)(1 / elapsed.count())), 0, 0, 0, 32, 0xffff00);
 		start = std::chrono::high_resolution_clock::now();
 	
 #if GESTURE_DEBUG
@@ -158,7 +78,8 @@ void SimonSays::run()
 			user.update(*kinectStream->getUserSkeleton());
 		}
 
-		kinectStream->drawString(user.print().c_str(), 0, camera->getHeight()-32, 0, 32);
+		kinectStream->drawString(user.print().c_str(), 0,930, 0, 32, 0);		
+		kinectStream->BufferSwap();
 #else 
 		//simon says starts here
 		elapsed = std::chrono::high_resolution_clock::now() - start;

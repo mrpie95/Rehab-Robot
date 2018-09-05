@@ -2,8 +2,8 @@
 #include <math.h>
 
 #define PI 3.14159265
-#define ANGLE_FOR_SQUAT_COMPLETION 100
-#define ANGLE_FOR_SQUAT_DOING 150
+#define ANGLE_FOR_SQUAT_COMPLETION 0
+#define ANGLE_FOR_SQUAT_DOING 70
 
 SquatGesture::SquatGesture() :GestureInterface("Squat")
 {
@@ -18,13 +18,16 @@ SquatGesture::~SquatGesture()
 bool SquatGesture::checkForGesture()
 {
 	angleOfSquat = asin( (this->getLeftHipPos().y - this->getLeftKneePos().y) / euclidDistance3D(this->getLeftKneePos(), this->getLeftHipPos())) * 180.0/PI;
-	angleOfSquat += 90.0;
+	angleOfSquat += asin((this->getRightHipPos().y - this->getRightKneePos().y) / euclidDistance3D(this->getRightKneePos(), this->getRightHipPos())) * 180.0 / PI;
+	angleOfSquat /= 2;
 
 	return angleOfSquat <= ANGLE_FOR_SQUAT_COMPLETION;
 }
 
 bool SquatGesture::checkForDoingGesture()
 {
+	//todo: remove this
+	return true;
 	return angleOfSquat <= ANGLE_FOR_SQUAT_DOING;
 }
 

@@ -13,18 +13,102 @@
 #define NUM_OF_CHUNCKS(dataSize, chunksize) ((((dataSize)-1)/(chunksize)+1))
 #define CHUNCK_SIZE(dataSize, chunksize) (NUM_OF_CHUNCKS(dataSize, chunksize)*(chunksize))
 
-KinectStream::KinectStream(openni::Device& device, openni::VideoStream& depthStream, openni::VideoStream& colourStream, nite::UserTracker& tracker): 
-	kinect(device), depthStream(depthStream), colourStream(colourStream), tracker(tracker) ,streams(NULL), font("fonts/arial.ttf")
+KinectStream::KinectStream() : streams(NULL), font("fonts/arial.ttf")
 {
+
 }
+
 
 
 KinectStream::~KinectStream()
 {
 }
 
-void KinectStream::init()
+bool KinectStream::init()
 {
+
+	if (openni::OpenNI::initialize() != openni::Status::STATUS_OK)
+	{
+		log(openni::OpenNI::getExtendedError());
+		return false;
+	}
+	else
+	{
+		log("OpenNI succefully initilized");
+	}
+
+	nite::NiTE::initialize();
+
+
+	openni::Array<openni::DeviceInfo> devices;
+	openni::OpenNI::enumerateDevices(&devices);
+
+	for (int i = 0; i < devices.getSize(); i++)
+	{
+		log(devices[i].getName());
+	}
+
+	if (!devices.getSize())
+	{
+		log("Failed to find any kinected devices");
+		return false;
+	}
+
+	const char* deviceuri = openni::ANY_DEVICE;
+	openni::Status kinectStatus = kinect.open(deviceuri);
+
+	if (kinectStatus != openni::Status::STATUS_OK)
+	{
+		log(openni::OpenNI::getExtendedError());
+		return false;
+	}
+	else
+	{
+		log("Kinect URI successfully opened");
+	}
+
+	if (tracker.create(&kinect) != openni::Status::STATUS_OK)
+	{
+		log("failed to create traker");
+		return false;
+	}
+
+	kinectStatus = depthStream.create(kinect, openni::SENSOR_DEPTH);
+
+	if (kinectStatus == openni::Status::STATUS_OK)
+	{
+		kinectStatus = depthStream.start();
+		if (kinectStatus != openni::Status::STATUS_OK)
+		{
+			log(openni::OpenNI::getExtendedError());
+			depthStream.destroy();
+			return false;
+		}
+	}
+	else
+	{
+		log(openni::OpenNI::getExtendedError());
+		return false;
+	}
+
+	kinectStatus = colourStream.create(kinect, openni::SENSOR_COLOR);
+
+	if (kinectStatus == openni::Status::STATUS_OK)
+	{
+		kinectStatus = colourStream.start();
+		if (kinectStatus != openni::Status::STATUS_OK)
+		{
+			log(openni::OpenNI::getExtendedError());
+			colourStream.destroy();
+			return false;
+		}
+	}
+	else
+	{
+		log(openni::OpenNI::getExtendedError());
+		return false;
+	}
+
 
 	streams = new openni::VideoStream*[1];
 
@@ -37,7 +121,7 @@ void KinectStream::init()
 
 	if (colourStream.isValid())
 	{
-		
+
 		colourMode = colourStream.getVideoMode();
 
 		colourResolutionX = colourMode.getResolutionX();
@@ -49,7 +133,7 @@ void KinectStream::init()
 	else
 	{
 		log("No color streams found");
-		return;
+		return false;
 	}
 
 	streams[0] = &colourStream;
@@ -62,10 +146,22 @@ void KinectStream::init()
 	if (font.Error())
 		log("Failed to load in font file");
 
+	window = new Window("Memes", 1280, 960, 50, 50);
+	window->init();
+	this->initOPGL(window->getWidth(), window->getHeight());
+}
+
+void KinectStream::initOPGL(int width, int height)
+{
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(0, width, height, 0, -1.0f, 1.0f);
+	glViewport(0, 0, width, height);
 }
 
 
-// TODO: this can probalbt be done in a fragment and vertext shader program and will scale properly and remove that stutter
+
 void KinectStream::run()
 {
 	int index = -1;
@@ -84,7 +180,9 @@ void KinectStream::run()
 	else
 		log("failed to read frame, how did you get here?");
 
-	
+	this->drawColorFrame(QuadData(0, window->getHeight() / 2, window->getHeight() / 2, window->getWidth() / 2));
+	this->drawDepthFrame(QuadData(window->getWidth() / 2, 0, window->getHeight() / 2, window->getWidth() / 2));
+	this->runTracker(QuadData(0, window->getHeight() / 2, window->getHeight() / 2, window->getWidth() / 2));
 }
 
 
@@ -114,9 +212,9 @@ void KinectStream::drawDepthFrame(const QuadData& pos)
 			for (size_t j = 0; j < depthFrame.getWidth(); j++, depthPixel++, pixelTexture++)
 			{
 				// TODO: fix this 16bit depthpixel to 24bit rgb
-				pixelTexture->r = (*depthPixel / 0xff) + 255;
-				pixelTexture->g = (*depthPixel / 0xff) + 255;
-				pixelTexture->b = (*depthPixel / 0xff) + 255;
+				pixelTexture->r = *depthPixel;
+				pixelTexture->g = *depthPixel;
+				pixelTexture->b = *depthPixel;
 			}
 			depthRow += rowBufferSize;
 			textureRow += colorTextureMapX;
@@ -153,10 +251,8 @@ void KinectStream::drawDepthFrame(const QuadData& pos)
 	}
 }
 
-void KinectStream::drawColorFrame(const QuadData& pos, int width, int height)
+void KinectStream::drawColorFrame(const QuadData& pos)
 {
-	
-
 	//file texture map with 0s
 	memset(colorTextureMap, 0, colorTextureMapX*colorTextureMapY * sizeof(openni::RGB888Pixel));
 
@@ -180,13 +276,6 @@ void KinectStream::drawColorFrame(const QuadData& pos, int width, int height)
 			frameRowTexture += rowBufferSize;
 			textureRow += colorTextureMapX;
 		}
-
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
-		glLoadIdentity();
-		glOrtho(0, width, height, 0, -1.0f, 1.0f);
-		glViewport(0,0,width,height);
-
 
 		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); //what type of varible name is GL_LINEAR_MIPMAP_LINEAR
@@ -223,20 +312,67 @@ void KinectStream::drawColorFrame(const QuadData& pos, int width, int height)
 	}
 }
 
-void KinectStream::drawString(std::string string, float x, float y, float z, int size)
+
+/**
+* Bug with the colour of text, used pixmap instead of texture or polygons. Can't change colour of pixmap useing glcolor have to do some hacky shit. 
+* Can't use texture/polygons with how i set up cooridnates with glortho, changing this breaks depth/colour/skeleton drawing.
+* Might be able to translate texture/poly text after the fact.
+**/
+void KinectStream::drawString(std::string string, float x, float y, float z, int size, int colour)
 {
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
+
+	//glColor4i(((colour & 0xff0000) >> 16), ((colour & 0x00ff00) >> 8), (colour & 0x0000ff), 1.0);
+	glPixelTransferi(GL_RED_BIAS, -((colour & 0xff0000) >> 16));
+	glPixelTransferi(GL_GREEN_BIAS, -((colour & 0x00ff00) >> 8));
+	glPixelTransferi(GL_BLUE_BIAS, -(colour & 0x0000ff));
+
+
 	font.FaceSize(size);
 	std::istringstream s(string);
 	std::string line;
 	int lineCount = 0;
 
-	while (std::getline(s,line))
+	while (std::getline(s, line))
 	{
-		font.Render(line.c_str(), -1, FTPoint(x, y -(lineCount*size),z));
+		font.Render(line.c_str(), -1, FTPoint(x, y - (lineCount*size), z));
 		lineCount++;
 	}
-	
 
+	glPopAttrib();
+
+}
+
+nite::Skeleton * KinectStream::getUserSkeleton()
+{
+	if (&PrimeUser != NULL)
+	{
+		if (!PrimeUser.isLost())
+		{
+			if (PrimeUser.getSkeleton().getState() == nite::SKELETON_TRACKED)
+			{
+				return (const_cast<nite::Skeleton*>(&PrimeUser.getSkeleton()));
+			}
+		}
+
+	}
+	return nullptr;
+}
+
+bool KinectStream::isPrimeUserLost()
+{
+	return !PrimeUser.isVisible();
+}
+
+Window * KinectStream::getWindow()
+{
+	return window;
+}
+
+void KinectStream::BufferSwap()
+{
+	window->FlipBuffers();
+	window->updateWindowParams();
 }
 
 void KinectStream::DrawLimb(nite::UserTracker* pUserTracker, const nite::SkeletonJoint& joint1, const nite::SkeletonJoint& joint2, const nite::UserData& user, const QuadData& pos)
@@ -354,17 +490,11 @@ void KinectStream::DrawSkeleton(nite::UserTracker* pUserTracker, const nite::Use
 
 
 //TODO: no such thing as to many global vars
-bool temp = false;
 void KinectStream::updateUserState(const nite::UserData & user, uint64_t delta)
 {
 	if (user.isNew())
 	{
 		logI("Found new user ", std::to_string(user.getId()));
-	}
-	else if (user.isVisible() && !temp)
-	{
-		logI("Tracking user ", std::to_string(user.getId()));
-		temp = true;
 	}
 	else if (user.isLost())
 	{
@@ -430,13 +560,6 @@ void KinectStream::runTracker(const QuadData& pos)
 		{
 			if (user.getSkeleton().getState() == nite::SKELETON_TRACKED)
 			{
-				/*glMatrixMode(GL_PROJECTION);
-				glPushMatrix();
-				glLoadIdentity();
-
-				glOrtho(0, 800, 600, 0, -1.0, 1.0);
-				glDisable(GL_TEXTURE_2D);*/
-
 				if (user.getPose(nite::POSE_CROSSED_HANDS).isEntered())
 				{
 					PrimeUser = user;

@@ -18,16 +18,16 @@ void GestureRecEngine::addGesture(GestureInterface *gest)
 
 GestureInterface * GestureRecEngine::checkForGesture(nite::Skeleton s)
 {
-
+	GestureInterface* temp = nullptr;
 	for (auto g: gestures)
 	{
 		g->updateSkeleton(s);
 		if (g->checkForGesture())
 		{
-			return g;
+			temp = g;
 		}
 	}
-	return nullptr;
+	return temp;
 }
 
 std::vector<GestureInterface*> GestureRecEngine::checkForDoingGestures(nite::Skeleton s)
