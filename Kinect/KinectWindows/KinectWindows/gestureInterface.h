@@ -6,14 +6,22 @@
 
 #define log(x) std::cout << x << std::endl
 
+
+/**
+* The abstract class used to create gestures, impelment thhe virtual functions in order to check for gesture or doing gesture
+*
+**/
 class GestureInterface
 {
 public:
 	GestureInterface(const char* name) : name(name) {};
 	virtual ~GestureInterface() {};
 
+	//Function that checks whether a gesture has happened, the condition has been met to satisfy that gesture
 	virtual bool checkForGesture() = 0;
+	//Function that checks whether a gesture is happening, i.e. a condition has been met that this gesture is satisfy but have not completed
 	virtual bool checkForDoingGesture() { return false; }
+
 	virtual std::string print() { return std::string(); }
 
 
