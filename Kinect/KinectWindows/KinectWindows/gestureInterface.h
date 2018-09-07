@@ -8,7 +8,7 @@
 
 
 /**
-* The abstract class used to create gestures, impelment thhe virtual functions in order to check for gesture or doing gesture
+* The abstract class used to create gestures, implement the virtual functions in order to check for gestures or doing gesture
 *
 **/
 class GestureInterface

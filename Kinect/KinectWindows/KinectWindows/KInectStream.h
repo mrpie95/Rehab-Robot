@@ -28,6 +28,11 @@ struct QuadData
 	}
 };
 
+
+/**
+	IMO, don't touch any of this code
+
+**/
 class KinectStream
 {
 private:
@@ -61,8 +66,12 @@ private:
 	void DrawLimb(nite::UserTracker* pUserTracker, const nite::SkeletonJoint& joint1, const nite::SkeletonJoint& joint2, const nite::UserData& user, const QuadData&);
 	void DrawSkeleton(nite::UserTracker* pUserTracker, const nite::UserData& userData, const QuadData&);
 	void updateUserState(const nite::UserData& user, uint64_t delta);
+
+	//draws and updates user map / skeletons
 	void runTracker(const QuadData&);
+	//draws depth frame in given quadrant of screen 
 	void drawDepthFrame(const QuadData&);
+	//draws colour frame in given quadrant
 	void drawColorFrame(const QuadData&);
 	void initOPGL(int width, int height);
 
@@ -80,8 +89,8 @@ public:
 
 	/**
 	* draws string to screen, with 0,0 being the bottom left of the screen.
-	* colours doesn't work consistently but here is some examples
-	* Cyan: 0xff0000 Pink: 0x00ff00 yellow: 0x0000ff red: 0x00ffff green: 0xff00ff blue: 0xffff00 white: 0x0
+	* Bug: colours doesn't work consistently but here is some examples
+	* Cyan: 0xff0000 Magenta: 0x00ff00 yellow: 0x0000ff red: 0x00ffff green: 0xff00ff blue: 0xffff00 white: 0x0
 	**/
 	void drawString(std::string, float x, float y, float z, int size, int colour);
 

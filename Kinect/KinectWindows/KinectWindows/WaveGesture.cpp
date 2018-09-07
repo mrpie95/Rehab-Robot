@@ -20,6 +20,7 @@ WaveGesture::~WaveGesture()
 {
 }
 
+
 bool WaveGesture::RightHandRightOfElbow()
 {
 	//hand above elobw

@@ -10,7 +10,6 @@ enum Hand
 class WaveGesture :public GestureInterface
 {
 private:
-	
 	std::chrono::high_resolution_clock::time_point start;
 	std::chrono::duration<double> elapsed;
 

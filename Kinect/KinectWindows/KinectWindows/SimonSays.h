@@ -19,10 +19,6 @@ class SimonSays
 {
 private:
 	KinectStream* kinectStream;
-	openni::Device kinect;
-	openni::VideoStream depth, color;
-	nite::UserTracker tracker;
-	nite::Skeleton* skeleton;
 	User user;
 
 	int getRandomNumber(int max);

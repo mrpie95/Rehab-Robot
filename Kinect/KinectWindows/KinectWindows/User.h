@@ -21,7 +21,9 @@ public:
 	User();
 	~User();
 
+	//Updates the user varibles per loop and checks for gestures.
 	void initGestureChecker();
+
 	void update(nite::Skeleton);
 	std::string print();
 

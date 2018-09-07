@@ -30,6 +30,8 @@ void User::initGestureChecker()
 	gestureChecker.addGesture(new SquatGesture());
 }
 
+
+
 void User::update(nite::Skeleton skeleton)
 {
 	this->skeleton = skeleton;
@@ -69,8 +71,6 @@ float User::euclidDistance3D(nite::Point3f a, nite::Point3f b) { return sqrt(pow
 //x,y
 float User::euclidDistance2D(nite::Point3f a, nite::Point3f b) { return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2)); }
 
-
-// TODO: catch exceptions, what happens if there is no skelton or it cant find joint
 
 //head
 nite::Point3f User::getHeadPos() { return skeleton.getJoint(nite::JOINT_HEAD).getPosition(); }
