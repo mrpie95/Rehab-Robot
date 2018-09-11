@@ -42,7 +42,7 @@ void User::update(nite::Skeleton skeleton)
 
 	distanceFromKinect = this->getTorsoPos().z;
 
-	GestureInterface* temp = gestureChecker.checkForGesture(skeleton);
+	Gesture* temp = gestureChecker.checkForGesture(skeleton);
 	activeGestures = gestureChecker.checkForDoingGestures(skeleton);
 
 	if (temp)

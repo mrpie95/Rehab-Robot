@@ -1,7 +1,7 @@
 #pragma once
-#include "gestureInterface.h"
+#include "Gesture.h"
 
-class HandsOnShoulders :public GestureInterface
+class HandsOnShoulders :public Gesture
 {
 public:
 	HandsOnShoulders();

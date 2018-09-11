@@ -3,7 +3,7 @@
 #define CONSECTIVE_SEGMENTS_NEEDED 4
 #define TIME_TO_COMPLETE_WAVE 5.0f
 
-WaveGesture::WaveGesture(Hand hand): GestureInterface("Wave"), hand(hand)
+WaveGesture::WaveGesture(Hand hand): Gesture("Wave"), hand(hand)
 {
 	if (hand == Hand::leftHand)
 		name = "Wave left hand";

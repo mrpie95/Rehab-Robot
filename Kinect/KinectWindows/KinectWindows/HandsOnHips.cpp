@@ -2,7 +2,7 @@
 
 
 
-HandsOnHips::HandsOnHips() : GestureInterface("Hands on hips")
+HandsOnHips::HandsOnHips() : Gesture("Hands on hips")
 {
 }
 

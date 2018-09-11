@@ -24,7 +24,7 @@ private:
 	int getRandomNumber(int max);
 	bool roll();
 
-	GestureInterface* gestureSelected;
+	Gesture* gestureSelected;
 public:
 	SimonSays();
 	~SimonSays();

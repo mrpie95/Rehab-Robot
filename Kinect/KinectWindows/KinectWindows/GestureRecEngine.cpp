@@ -11,14 +11,14 @@ GestureRecEngine::~GestureRecEngine()
 {
 }
 
-void GestureRecEngine::addGesture(GestureInterface *gest)
+void GestureRecEngine::addGesture(Gesture *gest)
 {
 	gestures.push_back(gest);
 }
 
-GestureInterface * GestureRecEngine::checkForGesture(nite::Skeleton s)
+Gesture * GestureRecEngine::checkForGesture(nite::Skeleton s)
 {
-	GestureInterface* temp = nullptr;
+	Gesture* temp = nullptr;
 	for (auto g: gestures)
 	{
 		g->updateSkeleton(s);
@@ -30,9 +30,9 @@ GestureInterface * GestureRecEngine::checkForGesture(nite::Skeleton s)
 	return temp;
 }
 
-std::vector<GestureInterface*> GestureRecEngine::checkForDoingGestures(nite::Skeleton s)
+std::vector<Gesture*> GestureRecEngine::checkForDoingGestures(nite::Skeleton s)
 {
-	std::vector<GestureInterface*> temp;
+	std::vector<Gesture*> temp;
 
 	for (auto g : gestures)
 	{

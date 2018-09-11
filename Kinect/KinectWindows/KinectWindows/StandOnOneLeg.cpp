@@ -2,7 +2,7 @@
 
 
 
-StandOnOneLeg::StandOnOneLeg() : GestureInterface("Stand on one Leg")
+StandOnOneLeg::StandOnOneLeg() : Gesture("Stand on one Leg")
 {
 }
 

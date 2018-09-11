@@ -1,5 +1,5 @@
 #pragma once
-#include "gestureInterface.h"
+#include "Gesture.h"
 #include <chrono>
 
 enum Hand
@@ -7,7 +7,7 @@ enum Hand
 	leftHand,
 	rightHand
 };
-class WaveGesture :public GestureInterface
+class WaveGesture :public Gesture
 {
 private:
 	std::chrono::high_resolution_clock::time_point start;

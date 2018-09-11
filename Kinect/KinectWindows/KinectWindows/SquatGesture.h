@@ -1,9 +1,9 @@
 #pragma once
-#include "gestureInterface.h"
+#include "Gesture.h"
 
 
 class SquatGesture :
-	public GestureInterface
+	public Gesture
 {
 private:
 	float angleOfSquat; //inDegrees

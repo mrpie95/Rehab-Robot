@@ -3,10 +3,11 @@
 #include <NiTE.h>
 #include <vector>
 #include <memory>
-#include "gestureInterface.h"
+#include "Gesture.h"
 #include <FTGL/FTGLPixmapFont.h>
 #include "Window.h"
 
+//Used implment the positions of windows within the windows
 struct QuadData
 {
 	int topLeftX, topLeftY;
@@ -30,8 +31,6 @@ struct QuadData
 
 
 /**
-	IMO, don't touch any of this code
-
 **/
 class KinectStream
 {

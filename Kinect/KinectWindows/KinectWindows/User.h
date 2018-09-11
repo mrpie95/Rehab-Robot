@@ -1,6 +1,6 @@
 #pragma once
 #include <NiTE.h>
-#include "gestureInterface.h"
+#include "Gesture.h"
 #include "GestureRecEngine.h"
 #include <string>
 
@@ -14,8 +14,8 @@ private:
 	int height;
 	int distanceFromKinect;
 	
-	GestureInterface* lastGesture;
-	std::vector<GestureInterface*> activeGestures;
+	Gesture* lastGesture;
+	std::vector<Gesture*> activeGestures;
 	
 public:
 	User();

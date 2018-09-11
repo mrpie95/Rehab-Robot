@@ -153,7 +153,7 @@
     <ClCompile Include="HandsOnHips.cpp" />
     <ClCompile Include="HandsOnShoulders.cpp" />
     <ClCompile Include="HandsOutFront.cpp" />
-    <ClCompile Include="KInectStream.cpp" />
+    <ClCompile Include="KinectStream.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SimonSays.cpp" />
     <ClCompile Include="SquatGesture.cpp" />
@@ -163,13 +163,13 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="gestureInterface.h" />
+    <ClInclude Include="Gesture.h" />
     <ClInclude Include="GestureRecEngine.h" />
     <ClInclude Include="HandsOnHead.h" />
     <ClInclude Include="HandsOnHips.h" />
     <ClInclude Include="HandsOnShoulders.h" />
     <ClInclude Include="HandsOutFront.h" />
-    <ClInclude Include="KInectStream.h" />
+    <ClInclude Include="KinectStream.h" />
     <ClInclude Include="SimonSays.h" />
     <ClInclude Include="SquatGesture.h" />
     <ClInclude Include="StandOnOneLeg.h" />

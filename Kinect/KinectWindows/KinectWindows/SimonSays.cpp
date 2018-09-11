@@ -50,7 +50,7 @@ void SimonSays::init()
 void SimonSays::run()
 {
 
-	GestureInterface* g = new SquatGesture();
+	Gesture* g = new SquatGesture();
 	SDL_Event e;
 	bool playingGame = true;
 	int num = 0;
@@ -60,7 +60,7 @@ void SimonSays::run()
 	std::chrono::duration<double> elapsed;
 	bool simonSays;
 	bool first = true;
-	GestureInterface* prevGesture = nullptr;
+	Gesture* prevGesture = nullptr;
 
 	//TODO:: it sometimes crashes here
 	for (;;) {

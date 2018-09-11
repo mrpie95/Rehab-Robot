@@ -2,7 +2,7 @@
 
 
 
-HandsOutFront::HandsOutFront() : GestureInterface("Hands Out Front")
+HandsOutFront::HandsOutFront() : Gesture("Hands Out Front")
 {
 }
 

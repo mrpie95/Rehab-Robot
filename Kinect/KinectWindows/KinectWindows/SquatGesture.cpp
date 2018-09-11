@@ -5,7 +5,7 @@
 #define ANGLE_FOR_SQUAT_COMPLETION 0
 #define ANGLE_FOR_SQUAT_DOING 70
 
-SquatGesture::SquatGesture() :GestureInterface("Squat")
+SquatGesture::SquatGesture() :Gesture("Squat")
 {
 	angleOfSquat = 180.0;
 }

@@ -2,7 +2,7 @@
 
 
 
-HandsOnHead::HandsOnHead(): GestureInterface("Hands on head")
+HandsOnHead::HandsOnHead(): Gesture("Hands on head")
 {
 }
 

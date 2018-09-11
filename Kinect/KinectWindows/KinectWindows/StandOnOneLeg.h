@@ -1,6 +1,6 @@
 #pragma once
-#include "gestureInterface.h"
-class StandOnOneLeg :public GestureInterface
+#include "Gesture.h"
+class StandOnOneLeg :public Gesture
 {
 public:
 	StandOnOneLeg();

@@ -2,7 +2,7 @@
 
 
 
-HandsOnShoulders::HandsOnShoulders() : GestureInterface("Hands on shoulders")
+HandsOnShoulders::HandsOnShoulders() : Gesture("Hands on shoulders")
 {
 }
 

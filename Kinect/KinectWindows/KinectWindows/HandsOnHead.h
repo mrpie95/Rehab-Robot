@@ -1,12 +1,12 @@
 #pragma once
-#include "gestureInterface.h"
+#include "Gesture.h"
 
-class HandsOnHead :public GestureInterface
+class HandsOnHead :public Gesture
 {
 public:
 	HandsOnHead();
 	~HandsOnHead();
 
-	bool checkForGesture();
+	bool checkForGesture() override;
 };
 

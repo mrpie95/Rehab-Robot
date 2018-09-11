@@ -11,11 +11,11 @@
 * The abstract class used to create gestures, implement the virtual functions in order to check for gestures or doing gesture
 *
 **/
-class GestureInterface
+class Gesture
 {
 public:
-	GestureInterface(const char* name) : name(name) {};
-	virtual ~GestureInterface() {};
+	Gesture(const char* name) : name(name) {};
+	virtual ~Gesture() {};
 
 	//Function that checks whether a gesture has happened, the condition has been met to satisfy that gesture
 	virtual bool checkForGesture() = 0;
