@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title data-tf="@head_title"></title>
+</head>
+<body>
+
+<h1>Log In</h1>
+
+<form method="post" data-tf="@entry_form">
+  <p>
+    <label>Username<br /><input data-tf="@username" /></label>
+  </p>
+  <p>
+    <label>Password<br /><input data-tf="@password" /></label>
+  </p>
+  <p>
+    <input type="submit" value="Log In" />
+  </p>
+</form>
+<a href="#" data-tf="@link_to_entry">Register</a><br /><br />
+<a>Forgot password</a><br />
+
+<p>Table of users: for testing purposes.</p>
+<table border="1" cellpadding="5" style="border: 1px #d0d0d0 solid; border-collapse: collapse;">
+  <tr>
+    <th>UserId</th>
+    <th>Username</th>
+    <th>Password</th>
+    <th>Name</th>
+    <th></th>
+  </tr>
+  <tr data-tf="@for">
+    <td data-tf="@userid"></td>
+    <td data-tf="@username"></td>
+    <td data-tf="@password"></td>
+    <td data-tf="@name"></td>
+    <td>
+      <a href="#" data-tf="@link_to_show">Show</a>
+      <a href="#" data-tf="@link_to_edit">Edit</a>
+      <a href="#" data-tf="@link_to_remove">Remove</a>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

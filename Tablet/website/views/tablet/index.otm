@@ -1,0 +1,25 @@
+#include "tablet.h"
+
+@head_title ~= "Log In Page"
+
+@for :
+tfetch(QList<Tablet>, tabletList);
+for (const auto &i : tabletList) {
+    %%
+}
+
+@userid ~= i.userId()
+
+@username ~= i.username()
+
+@password ~= i.password()
+
+@name ~= i.name()
+
+@link_to_entry :== linkTo("Register", urla("create"))
+
+@link_to_show :== linkTo("Show", urla("show", i.userId()))
+
+@link_to_edit :== linkTo("Edit", urla("save", i.userId()))
+
+@link_to_remove :== linkTo("Remove", urla("remove", i.userId()), Tf::Post, "confirm('Are you sure?')")

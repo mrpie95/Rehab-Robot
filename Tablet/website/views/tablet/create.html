@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title data-tf="@head_title"></title>
+</head>
+<body>
+<p style="color: red" data-tf="@error_msg"></p>
+<p style="color: green" data-tf="@notice_msg"></p>
+
+<h1>New User</h1>
+
+<form method="post" data-tf="@entry_form">
+  <p>
+    <label>Username<br /><input data-tf="@username" /></label>
+  </p>
+  <p>
+    <label>Password<br /><input data-tf="@password" /></label>
+  </p>
+  <p>
+    <label>Name<br /><input data-tf="@name" /></label>
+  </p>
+  <p>
+    <input type="submit" value="Create" />
+  </p>
+</form>
+
+<a href="#" data-tf="@link_to_index">Back</a>
+
+</body>
+</html>
