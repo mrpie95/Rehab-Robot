@@ -1,0 +1,20 @@
+#include "tablet.h"
+
+#init
+ tfetch(QVariantMap, tablet);
+
+@head_title ~= "Register"
+
+@error_msg ~=$ error
+
+@notice_msg ~=$ notice
+
+@entry_form |== formTag(urla("create"))
+
+@username |== inputTextTag("tablet[username]", tablet["username"].toString())
+
+@password |== inputTextTag("tablet[password]", tablet["password"].toString())
+
+@name |== inputTextTag("tablet[name]", tablet["name"].toString())
+
+@link_to_index |== linkTo("Back", urla("index"))
