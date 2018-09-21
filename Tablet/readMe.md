@@ -14,7 +14,7 @@ A logging class has been created in order to keep track of what is going wrong a
 </ul>
 
 
-<h2>Server</h2>
+<h2>Building and Running</h2>
 <p>Currently there is no CMake file so compilation is done manually. Running the server requires the specification of a a config file (config.js). </p>
 
 <h3>Build</h3>
