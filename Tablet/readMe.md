@@ -1,12 +1,7 @@
 <h1>CppCMS Server</h1>
 
 <h2>Server</h2>
-<p>CppCMS i used to create a web server that is run in C++.  This web server acts as the interface between the tablet and the other modules such as simon says and the story telling modules</p>
-
-
-
-<h2>Server</h2>
-<p>The server class is in charge of hosting the site responding and recieving infomation from the tablet. </p>
+<p>CppCMS i used to create a web server that is run in C++.  This web server acts as the interface between the tablet and the other modules such as simon says and the story telling modules. The server class is in charge of hosting the site responding and recieving infomation from the tablet. </p>
 
 <h2>Logger</h2>
 A logging class has been created in order to keep track of what is going wrong and to help in diagnsis of bugs. Current just including the logger.h, instating an object and callig x.LogEvent(string) will log the the time and whatever you specify. Currently not fininshed but does do basic logs.
