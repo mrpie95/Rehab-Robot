@@ -1,0 +1,56 @@
+<% c++ #include "content.h" %>
+<% skin skin %>
+<% view Content uses content::Content %>
+<% template render() %>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ajax Example</title>
+        <script>
+            function loadXMLDoc()
+            {
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.open("POST", "/ajax", true);
+
+                xmlhttp.onreadystatechange = function() {
+                    var res;
+                    
+                    if (xmlhttp.readyState === 3) {
+                        if (xmlhttp.status === 200) {
+                            var result = eval("(" + xmlhttp.responseText + ")");
+
+                            if (result.error == null) {
+                                res = result.result;
+                            }
+                            else {
+                                res = result.error;
+                            }
+                        }
+                        else {
+                            res = "Invalid Status " + xmlhttp.status;
+                        }
+
+                        document.getElementById("myDiv").innerHTML = res;
+                    }
+                    /*else {
+                        res = "Not valid state " + xmlhttp.readyState;
+                    }
+
+                    document.getElementById("myDiv").innerHTML = res;*/
+                }
+
+                var request = '{"method" : "message"}';
+                xmlhttp.send(request);
+            }
+        </script>
+    </head>
+    <body>
+        <div id="myDiv">
+            <h2>Let AJAX change this text</h2>
+        </div>
+        <button type="button" onclick="loadXMLDoc()">Change Content</button>
+    </body>
+</html>
+<% end template %>
+<% end view %>
+<% end skin %>
