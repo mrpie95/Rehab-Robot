@@ -8,6 +8,7 @@
 #include "HandsOutFront.h"
 #include "SquatGesture.h"
 
+
 User::User(): lastGesture(nullptr)
 {
 }
@@ -26,8 +27,8 @@ void User::initGestureChecker()
 	gestureChecker.addGesture(new WaveGesture(Hand::rightHand));
 	gestureChecker.addGesture(new WaveGesture(Hand::leftHand));
 	gestureChecker.addGesture(new StandOnOneLeg());
-	gestureChecker.addGesture(new HandsOutFront());
 	gestureChecker.addGesture(new SquatGesture());
+	//gestureChecker.addGesture(new HandsOutFront());
 }
 
 

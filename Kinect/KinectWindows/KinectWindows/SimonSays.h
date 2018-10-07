@@ -11,6 +11,7 @@
 #include <string>
 #include <chrono>
 #include "User.h"
+#include "Robot.h"
 #define log(x) std::cout << x << std::endl;
 
 #define SIMON_NOT_SAY_CHANCE 0.2f
@@ -25,8 +26,10 @@ private:
 	bool roll();
 
 	Gesture* gestureSelected;
+	Robot nao;
 public:
 	SimonSays();
+	SimonSays(const char*);
 	~SimonSays();
 
 	void init();

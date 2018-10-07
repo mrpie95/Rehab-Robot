@@ -3,8 +3,6 @@
 #include <GL/glew.h>
 #include <string>
 #include <algorithm>
-#include <FTGL/ftgl.h>
-#include <FTGL/FTPoint.h>
 #include <sstream>
 #define TEXTURE_SIZE 512
 

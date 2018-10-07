@@ -27,6 +27,9 @@ public:
 	void update(nite::Skeleton);
 	std::string print();
 
+	Gesture* getLastGesture() { return lastGesture; }
+	std::vector<Gesture*> getGestures() { return gestureChecker.getGestures(); }
+
 protected:
 	float euclidDistance3D(nite::Point3f a, nite::Point3f b);
 	//x,y
