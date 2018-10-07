@@ -1,20 +1,42 @@
+#include "Robot.h"
+#include <chrono>
 #include "SimonSays.h"
 
-#define log(x) std::cout << x << std::endl;
+#include <exception>
 
 
-int main(int argc, char** argv)
+extern "C" __declspec(dllexport) void simonSays()
 {
 	try
 	{
-		SimonSays simon;
-		simon.init();
-		simon.run();
+		SimonSays game("169.254.79.239");
+		game.init();
+		game.run();
 	}
-	catch (...)
+	catch (std::exception e)
 	{
-		log("Yeah Nah");
-		return 123456789;
+		std::cout << e.what() << std::endl;
 	}
+}
+
+int main(int argc, char** argv)
+{
+	//Robot nao("169.254.79.239");
+	//nao.stand();
+	//nao.standOnOneLeg();
+
+
+	try
+	{
+		SimonSays game("169.254.79.239");
+		game.init();
+		game.run();
+	}
+	catch (std::exception e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	
+	
 	return 0;
 }

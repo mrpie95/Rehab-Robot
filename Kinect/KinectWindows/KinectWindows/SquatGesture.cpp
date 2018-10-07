@@ -2,7 +2,7 @@
 #include <math.h>
 
 #define PI 3.14159265
-#define ANGLE_FOR_SQUAT_COMPLETION 0
+#define ANGLE_FOR_SQUAT_COMPLETION 10
 #define ANGLE_FOR_SQUAT_DOING 70
 
 SquatGesture::SquatGesture() :Gesture("Squat")
