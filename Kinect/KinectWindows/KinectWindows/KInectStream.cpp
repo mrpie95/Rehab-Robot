@@ -8,8 +8,8 @@
 #include <sstream>
 #define TEXTURE_SIZE 512
 
-#define log(x) std::cout << x << std::endl
-#define logI(x,i) std::cout << x <<" "<< i << std::endl;
+#define log(x) std::cout << x << '\n'
+#define logI(x,i) std::cout << x <<" "<< i << '\n'
 #define NUM_OF_CHUNCKS(dataSize, chunksize) ((((dataSize)-1)/(chunksize)+1))
 #define CHUNCK_SIZE(dataSize, chunksize) (NUM_OF_CHUNCKS(dataSize, chunksize)*(chunksize))
 
@@ -110,7 +110,7 @@ bool KinectStream::init()
 	}
 
 
-	streams = new openni::VideoStream*[1];
+	streams = new openni::VideoStream*[2];
 
 	openni::VideoMode colourMode;
 
@@ -164,7 +164,7 @@ void KinectStream::initOPGL(int width, int height)
 
 void KinectStream::run()
 {
-	int index = -1;
+	int index = 0;
 	int streamCount = 1;
 
 	openni::Status streamStatus = openni::OpenNI::waitForAnyStream(streams, streamCount, &index, openni::TIMEOUT_FOREVER);

@@ -33,13 +33,7 @@
     <ClCompile Include="SimonSays.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HandsOutFront.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="User.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GestureRecEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="KinectStream.cpp">
@@ -61,6 +55,15 @@
       <Filter>Gestures\Source</Filter>
     </ClCompile>
     <ClCompile Include="WaveGesture.cpp">
+      <Filter>Gestures\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="INIHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GestureRecEngine.cpp">
+      <Filter>Gestures\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="HandsOutFront.cpp">
       <Filter>Gestures\Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -86,9 +89,6 @@
     <ClInclude Include="StandOnOneLeg.h">
       <Filter>Gestures\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="HandsOutFront.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SquatGesture.h">
       <Filter>Gestures\Headers</Filter>
     </ClInclude>
@@ -103,6 +103,12 @@
     </ClInclude>
     <ClInclude Include="Gesture.h">
       <Filter>Gestures</Filter>
+    </ClInclude>
+    <ClInclude Include="INIHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HandsOutFront.h">
+      <Filter>Gestures\Headers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

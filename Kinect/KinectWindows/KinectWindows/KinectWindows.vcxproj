@@ -153,6 +153,7 @@
     <ClCompile Include="HandsOnHips.cpp" />
     <ClCompile Include="HandsOnShoulders.cpp" />
     <ClCompile Include="HandsOutFront.cpp" />
+    <ClCompile Include="INIHandler.cpp" />
     <ClCompile Include="KinectStream.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SimonSays.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="HandsOnHips.h" />
     <ClInclude Include="HandsOnShoulders.h" />
     <ClInclude Include="HandsOutFront.h" />
+    <ClInclude Include="INIHandler.h" />
     <ClInclude Include="KinectStream.h" />
     <ClInclude Include="SimonSays.h" />
     <ClInclude Include="SquatGesture.h" />

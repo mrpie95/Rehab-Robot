@@ -1,11 +1,19 @@
 #include "SimonSays.h"
-
-#define log(x) std::cout << x << std::endl;
+#include "INIHandler.h"
+#define log(x) std::cout << x << '\n';
 
 
 int main(int argc, char** argv)
 {
-	try
+
+	auto temp = INIHandler::getInstance().getValue(std::vector<std::string>(), "svCorrrectGestureResponse");
+
+	for (auto s: temp)
+	{
+		log(s);
+	}
+
+	/*try
 	{
 		SimonSays simon;
 		simon.init();
@@ -15,6 +23,8 @@ int main(int argc, char** argv)
 	{
 		log("Yeah Nah");
 		return 123456789;
-	}
+	}*/
+	log("TEst");
+	std::cin.get();
 	return 0;
 }
