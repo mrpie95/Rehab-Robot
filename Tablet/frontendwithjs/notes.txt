@@ -1,0 +1,5 @@
+- Register.js needs to be created.
+- Story telling pages not done yet (need to decide all buttons or check boxes)
+- Will we have landing page (atm login goes straight to Games.html)
+- landing.js has not been altered for merge.
+- Alerts are shown for debugging purposes.
