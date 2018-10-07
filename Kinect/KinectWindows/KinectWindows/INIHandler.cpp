@@ -69,6 +69,13 @@ void INIHandler::Load(std::string filepath)
 
 		while (std::getline(file, line))
 		{
+			if (line.empty())
+				continue;
+
+			if (line[0] == '/')
+				continue;
+
+
 			stringParser(line, '=', parsedString);
 			lineNumber++;
 			if (parsedString.size() != 2)

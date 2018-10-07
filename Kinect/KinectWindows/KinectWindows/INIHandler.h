@@ -3,6 +3,7 @@
 #include <map>
 #include <vector>
 #include <mutex>
+
 class INIHandler
 {
 private:
@@ -25,46 +26,28 @@ public:
 		return instance;
 	}
 
+	template<typename T>
+	T getValue(const std::string& key) = delete;
 
-	int getValue(int,const std::string& key) {
-		return !_valuesInt.count(key) ? int() : _valuesInt[key];
-	}
-
-	float getValue(float,const std::string& key) {
-		return !_valuesFloat.count(key) ? float() : _valuesFloat[key];
-	}
-
-	std::string getValue(const std::string& key) {
+	template<>
+	std::string getValue<std::string>(const std::string& key) {
 		return !_valuesString.count(key) ? std::string() : _valuesString[key];
 	}
 
-	std::vector<std::string> getValue(std::vector<std::string>,const std::string& key) {
+	template<>
+	int getValue<int>(const std::string& key) {
+		return !_valuesInt.count(key) ? int() : _valuesInt[key];
+	}
+
+	template<>
+	float getValue<float>(const std::string& key) {
+		return !_valuesFloat.count(key) ? float() : _valuesFloat[key];
+	}
+
+	template<>
+	std::vector<std::string> getValue<std::vector<std::string>>(const std::string& key) {
 		return !_valuesVectorString.count(key) ? std::vector<std::string>() : _valuesVectorString[key];
 	}
-
-	/*template <typename T>
-	T operator[](const std::string& key) = delete;
-
-	template<>
-	int operator[]<int>(const std::string& key) {
-		return _valuesInt.count(key) ? int() : _valuesInt[key];
-	}
-
-	template<>
-	float operator[]<float>(const std::string& key) {
-		return _valuesFloat.count(key) ? float() : _valuesFloat[key];
-	}
-
-	template<>
-	std::string operator[]<std::string>(const std::string& key) {
-		return _valuesString.count(key) ? std::string() : _valuesString[key];
-	}
-
-	template<>
-	std::vector<std::string> operator[]<std::vector<std::string>>(const std::string& key) {
-		return _valuesVectorString.count(key) ? std::vector<std::string>() : _valuesVectorString[key];
-	}*/
-
 
 
 	INIHandler(const INIHandler&) = delete;
