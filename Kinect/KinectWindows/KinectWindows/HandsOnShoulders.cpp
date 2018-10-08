@@ -1,5 +1,5 @@
 #include "HandsOnShoulders.h"
-
+#include "INIHandler.h"
 
 
 HandsOnShoulders::HandsOnShoulders() : Gesture("Hands on shoulders")
@@ -16,7 +16,10 @@ bool HandsOnShoulders::checkForGesture()
 	float leftHandToLeftShoulder = euclidDistance3D(this->getLeftHandPos(), this->getLeftShoulderPos());
 	float rightHandToRightShoulder = euclidDistance3D(this->getRightHandPos(), this->getRightShoulderPos());
 
-	if (leftHandToLeftShoulder < 200.0f && rightHandToRightShoulder < 200.0f)
+	float left = INIHandler::getInstance().getValue<float>("fLeftHandToLeftShoulderDistance");
+	float right = INIHandler::getInstance().getValue<float>("fRightHandToRightShoulderDistance");
+
+	if (leftHandToLeftShoulder < left && rightHandToRightShoulder < right)
 	{
 		return true;
 	}

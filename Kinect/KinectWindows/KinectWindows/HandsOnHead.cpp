@@ -1,5 +1,5 @@
 #include "HandsOnHead.h"
-
+#include "INIHandler.h"
 
 
 HandsOnHead::HandsOnHead(): Gesture("Hands on head")
@@ -16,7 +16,10 @@ bool HandsOnHead::checkForGesture()
 	float LeftHandToHead = euclidDistance3D(this->getLeftHandPos(), this->getHeadPos());
 	float RightHandToHead = euclidDistance3D(this->getRightHandPos(), this->getHeadPos());
 
-	if (LeftHandToHead < 200.0f && RightHandToHead < 200.0f)
+	float left = INIHandler::getInstance().getValue<float>("fHandsOnHeadDistanceLeftHand");
+	float right = INIHandler::getInstance().getValue<float>("fHandsOnHeadDistanceRightHand");
+
+	if (LeftHandToHead < left && RightHandToHead < right)
 	{
 		return true;
 	}

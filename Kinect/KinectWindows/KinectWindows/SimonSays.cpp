@@ -64,12 +64,15 @@ void SimonSays::run()
 	int score = 0;
 	//TODO:: it sometimes crashes here
 	for (;;) {
+		elapsed = std::chrono::high_resolution_clock::now() - start;
+		start = std::chrono::high_resolution_clock::now();
+		int frameRate = 1.0f / elapsed.count();
 		SDL_PollEvent(&e); 
 	
 		kinectStream->run();
 		
-		kinectStream->drawString(std::to_string((int)(elapsed.count())), 0, 0, 0, 32, 0xffff00);
-
+	
+		kinectStream->drawString(std::to_string(frameRate), 0, 0, 0, 32, 0xffff00);
 		kinectStream->drawString(user.print().c_str(), 0, 930, 0, 32, 0);
 		kinectStream->BufferSwap();
 	
@@ -82,6 +85,4 @@ void SimonSays::run()
 			break;
 		}
 	}
-	nite::NiTE::shutdown();
-	openni::OpenNI::shutdown();
 }

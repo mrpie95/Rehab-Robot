@@ -20,6 +20,12 @@ KinectStream::KinectStream() : streams(NULL), font("fonts/arial.ttf")
 
 KinectStream::~KinectStream()
 {
+	nite::NiTE::shutdown();
+	openni::OpenNI::shutdown();
+	delete window;
+	delete streams;
+	delete colorTextureMap;
+	delete depthTextureMap;
 }
 
 bool KinectStream::init()
@@ -78,7 +84,7 @@ bool KinectStream::init()
 		kinectStatus = depthStream.start();
 		if (kinectStatus != openni::Status::STATUS_OK)
 		{
-			log(openni::OpenNI::getExtendedError());
+			log("Failed To start Depth Stream");
 			depthStream.destroy();
 			return false;
 		}
@@ -96,7 +102,7 @@ bool KinectStream::init()
 		kinectStatus = colourStream.start();
 		if (kinectStatus != openni::Status::STATUS_OK)
 		{
-			log(openni::OpenNI::getExtendedError());
+			log("Failed too start colour stream");
 			colourStream.destroy();
 			return false;
 		}
@@ -108,7 +114,7 @@ bool KinectStream::init()
 	}
 
 
-	streams = new openni::VideoStream*[2];
+	streams = new openni::VideoStream*[1];
 
 	openni::VideoMode colourMode;
 
@@ -124,7 +130,7 @@ bool KinectStream::init()
 
 		colourResolutionX = colourMode.getResolutionX();
 		colourResolutionY = colourMode.getResolutionY();
-
+		
 		streamWidth = colourResolutionX;
 		streamHeight = colourResolutionY;
 	}
@@ -135,7 +141,7 @@ bool KinectStream::init()
 	}
 
 	streams[0] = &colourStream;
-
+	
 	colorTextureMapX = CHUNCK_SIZE(streamWidth, 512);
 	colorTextureMapY = CHUNCK_SIZE(streamHeight, 512);
 	colorTextureMap = new openni::RGB888Pixel[colorTextureMapX * colorTextureMapY];
@@ -162,7 +168,7 @@ void KinectStream::initOPGL(int width, int height)
 
 void KinectStream::run()
 {
-	int index = 0;
+	int index = -1;
 	int streamCount = 1;
 
 	openni::Status streamStatus = openni::OpenNI::waitForAnyStream(streams, streamCount, &index, openni::TIMEOUT_FOREVER);
@@ -181,6 +187,11 @@ void KinectStream::run()
 	this->drawColorFrame(QuadData(0, window->getHeight() / 2, window->getHeight() / 2, window->getWidth() / 2));
 	this->drawDepthFrame(QuadData(window->getWidth() / 2, 0, window->getHeight() / 2, window->getWidth() / 2));
 	this->runTracker(QuadData(0, window->getHeight() / 2, window->getHeight() / 2, window->getWidth() / 2));
+
+	window->updateWindowParams();
+	glLoadIdentity();
+	glOrtho(0, window->getWidth(), window->getHeight(), 0, -1.0f, 1.0f);
+	glViewport(0, 0, window->getWidth(), window->getHeight());
 }
 
 

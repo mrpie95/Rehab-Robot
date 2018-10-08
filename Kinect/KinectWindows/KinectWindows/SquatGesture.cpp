@@ -1,8 +1,8 @@
 #include "SquatGesture.h"
 #include <math.h>
+#include "INIHandler.h"
 
 #define PI 3.14159265
-#define ANGLE_FOR_SQUAT_COMPLETION 10
 #define ANGLE_FOR_SQUAT_DOING 70
 
 SquatGesture::SquatGesture() :Gesture("Squat")
@@ -21,7 +21,9 @@ bool SquatGesture::checkForGesture()
 	angleOfSquat += asin((this->getRightHipPos().y - this->getRightKneePos().y) / euclidDistance3D(this->getRightKneePos(), this->getRightHipPos())) * 180.0 / PI;
 	angleOfSquat /= 2;
 
-	return angleOfSquat <= ANGLE_FOR_SQUAT_COMPLETION;
+	float angle = INIHandler::getInstance().getValue<float>("fAngleOfSquat");
+
+	return angleOfSquat <= angle;
 }
 
 bool SquatGesture::checkForDoingGesture()

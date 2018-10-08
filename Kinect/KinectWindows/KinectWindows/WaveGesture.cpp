@@ -1,7 +1,5 @@
 #include "WaveGesture.h"
-
-#define CONSECTIVE_SEGMENTS_NEEDED 4
-#define TIME_TO_COMPLETE_WAVE 5.0f
+#include "INIHandler.h"
 
 WaveGesture::WaveGesture(Hand hand): Gesture("Wave"), hand(hand)
 {
@@ -82,6 +80,8 @@ bool WaveGesture::checkForGesture()
 {
 	bool left = false;
 	bool right = false;
+	float timeToCompleteWaves = INIHandler::getInstance().getValue<float>("fTimeToCompleteWave");
+	int numberOfConsectiveChecks = INIHandler::getInstance().getValue<int>("iNumberOfConsectiveLeftRightChecksForWave");
 	if (hand == Hand::rightHand)
 	{
 		left = this->RightHandLeftOfElbow();
@@ -127,7 +127,7 @@ bool WaveGesture::checkForGesture()
 		}
 	}
 
-	if (correctSegmentCount == CONSECTIVE_SEGMENTS_NEEDED)
+	if (correctSegmentCount == numberOfConsectiveChecks)
 	{
 		lastLeftSegmentCorrect = false;
 		lastRightSegmentCorrect = false;
@@ -136,7 +136,7 @@ bool WaveGesture::checkForGesture()
 	}
 
 	//reset if it cant find gesture in time
-	if (elapsed.count() > TIME_TO_COMPLETE_WAVE)
+	if (elapsed.count() > timeToCompleteWaves)
 	{
 		correctSegmentCount = 0;
 		lastLeftSegmentCorrect = false;
@@ -154,5 +154,6 @@ bool WaveGesture::checkForDoingGesture()
 
 std::string WaveGesture::print()
 {
-	return std::string(std::to_string(correctSegmentCount) + "/" + std::to_string(CONSECTIVE_SEGMENTS_NEEDED) + " Correct Segments");
+	int numberOfConsectiveChecks = INIHandler::getInstance().getValue<int>("iNumberOfConsectiveLeftRightChecksForWave");
+	return std::string(std::to_string(correctSegmentCount) + "/" + std::to_string(numberOfConsectiveChecks) + " Correct Segments");
 }

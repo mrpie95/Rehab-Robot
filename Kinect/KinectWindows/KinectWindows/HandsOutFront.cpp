@@ -1,5 +1,5 @@
 #include "HandsOutFront.h"
-
+#include "INIHandler.h"
 
 
 HandsOutFront::HandsOutFront() : Gesture("Hands Out Front")
@@ -13,8 +13,11 @@ HandsOutFront::~HandsOutFront()
 
 bool HandsOutFront::checkForGesture()
 {
-	if (this->getLeftHandPos().z < this->getTorsoPos().z - 400.0f)
-		if (this->getRightHandPos().z < this->getTorsoPos().z - 400.0f)
+	float left = INIHandler::getInstance().getValue<float>("fHandOutFrontLeftHandDistanceFromChest");
+	float right = INIHandler::getInstance().getValue<float>("fHandOutFrontRightHandDistanceFromChest");
+
+	if (this->getLeftHandPos().z < this->getTorsoPos().z - left)
+		if (this->getRightHandPos().z < this->getTorsoPos().z - right)
 			return true;
 
 

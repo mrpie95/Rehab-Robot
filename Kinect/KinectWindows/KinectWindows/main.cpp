@@ -5,9 +5,8 @@
 
 int main(int argc, char** argv)
 {
-
-	log(INIHandler::getInstance().getValue<int>("iScoreToWin"));
-	log("TEst");
-	std::cin.get();
+	SimonSays game;
+	game.init();
+	game.run();
 	return 0;
 }

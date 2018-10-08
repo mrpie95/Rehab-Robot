@@ -1,5 +1,5 @@
 #include "HandsOnHips.h"
-
+#include "INIHandler.h"
 
 
 HandsOnHips::HandsOnHips() : Gesture("Hands on hips")
@@ -16,7 +16,10 @@ bool HandsOnHips::checkForGesture()
 	float leftHandToLeftHip = euclidDistance3D(this->getLeftHandPos(), this->getLeftHipPos()); 
 	float rightHandToRightHip = euclidDistance3D(this->getRightHandPos(), this->getRightHipPos());
 
-	if (leftHandToLeftHip < 200.0f && rightHandToRightHip < 200.0f)
+	float left = INIHandler::getInstance().getValue<float>("fLeftHandToLeftHipDistance");
+	float right = INIHandler::getInstance().getValue<float>("fRightHandToRightHipDistance");
+
+	if (leftHandToLeftHip < left && rightHandToRightHip < right)
 	{
 		return true;
 	}

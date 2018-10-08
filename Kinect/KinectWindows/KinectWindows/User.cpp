@@ -28,7 +28,7 @@ void User::initGestureChecker()
 	gestureChecker.addGesture(new WaveGesture(Hand::leftHand));
 	gestureChecker.addGesture(new StandOnOneLeg());
 	gestureChecker.addGesture(new SquatGesture());
-	//gestureChecker.addGesture(new HandsOutFront());
+	gestureChecker.addGesture(new HandsOutFront());
 }
 
 
