@@ -1,0 +1,90 @@
+{% extends "rehabrobot/generic.html" %}
+
+{% block content%}
+
+
+<div style="text-align: center;">
+<h1>Story Telling</h1>
+</div>
+
+
+
+
+<!-- <form action="#" method="post"">
+	{% csrf_token %}
+	<input type="text" class="form-control" id="meow" name='meow'>
+	<input type="text" class="form-control" id="how" name='how'>
+	<input type="text" class="form-control" id="cow" name='cow'>
+
+	<button type="submit">SUBMIT</button>
+</form> -->
+
+
+<!-- SORRT for NO CSS, if it was up to me i would castrate them all -->
+
+<form action="#" method="post">
+
+{% csrf_token %}
+<div style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap;">
+	<div class="card" style="width: 18rem; margin: 10px 10px 10px 10px; flex-basis: 20rem">
+	  <div class="card-body">
+		<h5 class="card-title">5 min Stories</h5>
+		<div class="radio" style="padding: 10% 10% 10% 10%;">
+			<label>
+			  <input type="radio" name='story' value="story1" >
+			  Story 1
+			</label>
+		  </div>
+		  <div class="radio" style="padding: 10% 10% 10% 10%;">
+			<label>
+			  <input type="radio" name='story' value="story2" >
+			  Story 2
+			</label>
+		  </div>
+	  </div>
+	</div>
+
+	<div class="card" style="width: 18rem; margin: 10px 10px 10px 10px; flex-basis: 20rem">
+	  <div class="card-body">
+		<h5 class="card-title">10 min Stories</h5>
+		<div class="radio" style="padding: 10% 10% 10% 10%;">
+			<label>
+			  <input type="radio" name='story' value="story3">
+			  Story 3
+			</label>
+		  </div>
+		  <div class="radio" style="padding: 10% 10% 10% 10%;">
+			<label>
+			  <input type="radio" name='story' value="story4" >
+			  Story 4
+			</label>
+		  </div> 
+	  </div>
+	</div>
+
+	<div class="card" style="width: 18rem; margin: 10px 10px 10px 10px; flex-basis: 20rem">
+	  <div class="card-body">
+		<h5 class="card-title">15 min Stories</h5>
+		<div class="radio" style="padding: 10% 10% 10% 10%;">
+			<label>
+			  <input type="radio" name='story' value="story5">
+			  Story 5
+			</label>
+		  </div>
+		  <div class="radio" style="padding: 10% 10% 10% 10%;">
+			<label>
+			  <input type="radio" name='story' value="story6">
+			  Story 6
+			</label>
+		  </div>
+	  </div>
+	</div>
+</div>
+<div style="text-align: center; margin: 10px 10px 10px 10px;">
+	<button type="submit" style="padding: 55px 55px 55px 55px;"  class="btn btn-raised btn-success btn-lg">Start Game!</button>
+</div>
+
+</form>
+
+
+{% endblock %}

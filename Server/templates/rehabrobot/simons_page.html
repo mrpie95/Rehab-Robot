@@ -1,0 +1,68 @@
+{% extends "rehabrobot/generic.html" %}
+
+{% block content%}
+
+<div style="text-align: center;">
+<h1>Simon Says</h1>
+</div>
+
+<form action="#" method="post">
+
+	{% csrf_token %}
+	<div style="display: flex; justify-content: space-evenly; align-items: center; flex-wrap: wrap;">
+		<div class="card" style="width: 18rem; margin: 10px 10px 10px 10px;">
+		  <div class="card-body">
+			<h5 class="card-title">Select Moves</h5>
+			<div class="checkbox" style="padding: 10% 10% 10% 10%;">
+				<label>
+				<input type="checkbox" name="move" value="bend knees">
+					Bend Knees
+				</label>
+			</div>
+			<div class="checkbox" style="padding: 10% 10% 10% 10%;">
+				<label>
+				  <input type="checkbox" name="move" value="raise right arm">
+				  Raise Right Arm
+				</label>
+			</div>
+			<div class="checkbox" style="padding: 10% 10% 10% 10%;">
+				<label>
+				  <input type="checkbox" name="move" value="raise left leg">
+				  Raise Left Leg
+				</label>
+			</div>
+			<p class="card-text">The selected moves will be used in the game.</p>
+		  </div>
+		</div>
+
+		<div class="card" style="width: 18rem; margin: 10px 10px 10px 10px;">
+		  <div class="card-body">
+			<h5 class="card-title">Select Duration</h5>
+			<div class="radio" style="padding: 10% 10% 10% 10%;">
+				<label>
+				  <input type="radio" name="duration" value="1 min" checked>
+				  1 min
+				</label>
+			  </div>
+			  <div class="radio" style="padding: 10% 10% 10% 10%;">
+				<label>
+				  <input type="radio" name="duration" value="2 mins">
+				  2 min
+				</label>
+			  </div>
+			  <div class="radio" style="padding: 10% 10% 10% 10%;">
+				<label>
+				  <input type="radio" name="duration" value="5 mins">
+				  5 min
+				</label>
+			  </div> 
+			<p class="card-text">The game will play for the selected duration.</p>
+		  </div>
+		</div>
+		<div style="display: inline-block; justify-content: center; align-items: center; flex-wrap: wrap;"">
+			<button type="submit" style="padding: 55px 55px 55px 55px;"  class="btn btn-raised btn-success btn-lg" id="start">Start Game!</button>
+		</div>
+	</div>
+</form>
+
+{% endblock %}

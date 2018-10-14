@@ -1,0 +1,16 @@
+{% extends "rehabrobot/generic.html" %}
+
+{% block content%}
+<div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
+
+    <form method="get" action="/simon">
+		  <button type="submit" style="background-color: #ffffff; margin: 100px 10px 10px 10px; padding: 7em;"  class="btn btn-raised btn-lg" id="simonsays">Simon Says</button>
+    </form>
+
+    <form method="get" action="/story">
+		  <button type="submit" style="background-color: #ffffff; margin: 100px 10px 10px 10px; padding: 7em;"  class="btn btn-raised btn-lg" id="storytelling">Story Telling</button>
+    </form>
+
+</div>
+
+{% endblock %}
