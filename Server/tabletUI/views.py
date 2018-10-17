@@ -9,6 +9,8 @@ from django.template import loader
 
 from django.shortcuts import render
 
+from ctypes import *
+
 # from .models import Question
 
 
@@ -26,6 +28,8 @@ def simon(request):
 
     if request.method == 'POST':
 
+        game = windll.LoadLibrary('simonSays.dll')
+        game.python_entry_init('HandsOnHead,HandsOnHips,HandsOnShoulders,WaveLeftHand,WaveRightHand,StandOnOneLeg,Squat,HandsOutFront', '169.254.79.239')
         move = request.POST.get('move')
         durationStr = request.POST.get('duration')
 
@@ -45,6 +49,7 @@ def simon(request):
 
         if duration > 0:
             if move == 'bend knees':
+                # game.python_entry_init('Squat', '169.254.79.239')
                 print('simons says bend knees')
                 # call bend knee functio method
 
@@ -61,7 +66,7 @@ def simon(request):
     return render(request, 'rehabrobot/simons_page.html')
 
 def story(request):
-    
+
     if request.method == 'POST':
 
         story = request.POST.get('story')
@@ -88,7 +93,7 @@ def story(request):
 
         elif story == 'story6':
             print('playing story 6')
-            # call story method 
+            # call story method
 
     return render(request, 'rehabrobot/story_page.html')
 
