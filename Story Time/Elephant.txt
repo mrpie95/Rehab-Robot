@@ -1,0 +1,6 @@
+^start(indicate)Elephants   are    very     big    with   a   very   long   trunk. 
+When they are happy they make loud noises.    
+
+^wait(disabled)Can you sound like an elephant?^stop(indicate)
+
+
